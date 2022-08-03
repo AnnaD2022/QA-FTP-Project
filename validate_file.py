@@ -1,26 +1,96 @@
-# Things to test:
-# Duplicated batch_ids - this value should be unique(though unsorted) in each.csv file; duplications would indicate a faulty .csv file and should
-# be logged and excluded
-# Missing headers or misspelt/incorrect headers, e.g. "batch" rather than "batch_id" - could fix this - add missing field, repair typo
-# Missing columns on a row
-# Invalid entries, e.g.reading values of 10 or greater
-# Each batch has 10 associated readings. - ensure no more/less
-# multiple entries for the same timestamp are not considered unusual.
-# All 10 readings should be represented as floating point numbers formatted up to three decimal places with no value exceeding 9.9, or less than
-# 0
-# (this would be considered invalid data).
-# Empty files (there are no "nil" returns)
-# Incorrectly formatted filenames.
-# Filenames for trial data exports are created using the following naming convention: MED_DATA_YYYYMMDDHHMMSS.csv
-# Files which contain these issues must be identified and logged using an appropriate technique
-# execution, i.e.using effective error handling to increase robustness of solution and use, by sanitising all user inputsto prevent malicious 
-# access or modificationof data and/or code.
+import csv
+import pandas
+import glob
+import os
 
-# pseudocode (overview)
-# take in one csv file (from server)
-# perform checks to test correctness of file - use pandas library for sanitisation + some checks (w3schools data cleaning)
-# automatically fix certain aspects e.g incorrect header
-# determine certain error flags based on what is (not) wrong with file
-# pass error flags to GUI/CLI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to create a 
-# sensible (calendar based) directory system hierarchy
-# add filename to some kind of log if fails tests (unless automatically/manually fixed?)
+# Things to test:
+# TODO pseudocode for remaining functions in verify_data
+# TODO implement/design error system
+# TODO code
+# TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
+# TODO automatically fix certain aspects e.g incorrect header
+# TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
+# modification of data and/or code - where is this necessary
+
+# perform checks to test correctness of file
+#TODO if flagged for deletion in one test, do you perform the rest?
+def verify_data(file_data):
+    check_header(file_data.head(1))
+    remove_empty(file_data)
+    #if file still has data after removing empty
+    # TODO check num columns - should be 12 to a row, no more/less
+    check_ids(file_data) #TODO if keeping data after removing empty, need to use new data
+    # TODO check timestamp format?regex?
+    # TODO check reading validity - all readings in all rows should be floats, formatted up to 3 dp, not less than 0 or greater than 9.9
+    # if rounding is wrong can fix - report error but not delete. if out of range or wrong data type (can prob fix ints)
+    # either remove and report or flag for deletion and report - different error code for each type of error. also imp will change based on if
+    # want to break after one error or keep checking for all errors
+
+    return #TODO change - delete/accept/fail flag
+
+def check_header(header):
+    #TODO implement
+    # compare header to correct string
+    # if they are not the same and header line exists partially (even if incorrect)
+    # generate string noting difference
+    # generate error code
+    # save to log file (check if already exists)
+    # do not mark to delete
+    # overwrite incorrect header with correct string
+    # elif they are not the same and header line does not exist
+    # insert header line if possible, if not possible mark to delete
+    # generate error code & message
+    # save to log file (check if already exists)
+    # else (header file is correct)
+    # do not mark to delete
+    return #TODO change to flag
+
+def remove_empty(file_data):
+    #TODO implement
+    # remove any rows with empty fields (pandas)
+    # if rows are removed
+    # generate error code + info
+    # save to log file (check if already exists)
+    # flag for deletion (?) - if not check to see if file is empty, if yes log error flag for deletion, if not do not flag for deletion
+    # if rows are not removed, do not flag for deletion
+    return #TODO change to flag and possibly modified file if decide to allow rows to be removed
+
+def check_ids(file_data):
+    #TODO implement
+    # create empty set 
+    # by default do not flag for deletion
+    # for row in file_data (pandas)
+    # batch_id = row[0]
+    # if batch_id is positive int
+    # if batch_id is in set
+    # log error and details
+    # flag for removal
+    # break or dont depending if want check for repeat warnings
+    # else
+    # add batch_id to set
+    # else
+    # log error and message (either for each incorrect row or just once)
+    # flag for deletion (and either break or keep going depending on above)
+    return #TODO change to flag
+
+# main
+# take in all csv files that have been requested from the server and not yet verified
+path = 'temp' #TODO - ensure file is saved in correct location
+files_to_check =  glob.glob(path + '/*.csv')
+for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
+     #check file contains data
+     if os.stat(file_name).st.size == 0:
+        #TODO make note of error
+        #flag to move to delete
+        tempstring = "" #TODO remove
+     else:
+        file_data = pandas.read_csv(file_name)
+        verify_data(file_data)
+    # TODO pass error flags to GUI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to
+    # create a sensible (calendar based) directory system hierarchy - year, month, day
+    # if log files exists, but not flagged to delete, still display warnings on GUI, move file and log both to archive
+    # if flagged to delete, pass error flags to GUI and move both file and log to delete
+    # TODO could do warnings per file or add file to list that is sent to gui at end, told to check logs for more info e.g. FILENAME has errors
+    # but has been repaired - check LOGNAME in archive for details.  FILENAME has errors and cannot be repaired - see LOGNAME in delete for 
+    # details
+    # TODO if not passed but fixable/ not too bad? - go into “failed”?
