@@ -7,11 +7,6 @@ from datetime import date
 
 def getDates():
     dates.config(text="Current date " + cal.get_date())
-    if cal.get_date() > str(date.today()):
-        dates.config(text="")
-        tkinter.messagebox.showerror(title="Error", message="Cannot select a day later "
-                                                            "than the current date!")
-
 
 if __name__ == '__main__':
     root = Tk()
@@ -24,8 +19,9 @@ if __name__ == '__main__':
 
     Button(root, text="Get Date", command=getDates).pack(pady=20)
 
+
     dates = Label(root, text="")
     cal.pack(pady=20)
-    dates.pack(pady=19)
+    dates.pack(pady=5, padx=30)
 
     root.mainloop()
