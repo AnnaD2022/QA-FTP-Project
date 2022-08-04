@@ -4,7 +4,6 @@ import glob
 import os
 
 # Things to test:
-# TODO pseudocode for remaining functions in verify_data
 # TODO implement/design error system
 # TODO code
 # TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
@@ -18,14 +17,10 @@ def verify_data(file_data):
     check_header(file_data.head(1))
     remove_empty(file_data)
     #if file still has data after removing empty
-    # TODO check num columns - should be 12 to a row, no more/less
+    check_num_columns(file_data)
     check_ids(file_data) #TODO if keeping data after removing empty, need to use new data
-    # TODO check timestamp format?regex?
-    # TODO check reading validity - all readings in all rows should be floats, formatted up to 3 dp, not less than 0 or greater than 9.9
-    # if rounding is wrong can fix - report error but not delete. if out of range or wrong data type (can prob fix ints)
-    # either remove and report or flag for deletion and report - different error code for each type of error. also imp will change based on if
-    # want to break after one error or keep checking for all errors
-
+    check_timestamp(file_data)
+    check_readings(file_data)
     return #TODO change - delete/accept/fail flag
 
 def check_header(header):
@@ -71,6 +66,32 @@ def check_ids(file_data):
     # else
     # log error and message (either for each incorrect row or just once)
     # flag for deletion (and either break or keep going depending on above)
+    return #TODO change to flag
+
+def check_num_columns(file_data):
+    # for row in file,
+    # get num values (count? string parsing? pandas?)
+    # should be 12 to a row, no more/less
+    # if not 12 flag for deletion, log error and comment
+    # break?
+    return #TODO change to flag
+
+def check_timestamp(file_data):
+    # for row in file (not first one)
+    # get second(?) row value
+    # check is valid time (use regex or datetime datatype)
+    # if invalid, flag for deletion and log error and comment
+    # break?
+    return #TODO change to flag
+
+def check_readings(file_data):
+    # for row in file (not header)
+    # for each reading
+    # check if float - can fix if int
+    # check formatted up to 3 dp - fix if wrong, report error but dont flag to delete
+    # check not less than 0 or greater than 9.9
+    # if unfixable error either remove and report or flag for deletion and report
+    # different error code for each type of error. also imp will change based on if want to break after one error or keep checking for all errors
     return #TODO change to flag
 
 # main
