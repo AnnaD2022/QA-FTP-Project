@@ -4,32 +4,31 @@ from pyftpdlib import authorizers
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib import servers
 
-def main():
-    # Instantiate a dummy authorizer for managing 'virtual' users
+##!!Add user and password before running
+user = ""
+password = ""
+
+##Server function
+def main(user, password):
+    ##DummyAuthorizer is used for managing users that can connect
     authorizer = authorizers.DummyAuthorizer()
 
-    # Define a new user having full r/w permissions and a read-only
-    # anonymous user
-    authorizer.add_user('user', '12345', '.', perm='elradfmwMT')
+    ##Create a basic user with permissions to list files/folders and read/download them. Folder shown is ./files
+    authorizer.add_user(user, password, './files', perm='lr')
 
-    # Instantiate FTP handler class
+    ##Initialises Handler, allows client to run FTP commands
     handler = FTPHandler
     handler.authorizer = authorizer
 
-    # Define a customized banner (string returned when client connects)
-    handler.banner = "hello client!"
-
-    # Specify a masquerade address and the range of ports to use for
-    # passive connections.  Decomment in case you're behind a NAT.
-    #handler.masquerade_address = '151.25.42.11'
-    #handler.passive_ports = range(60000, 65535)
-
-    # Instantiate FTP server class and listen on 0.0.0.0:2121
+    ##Create FTP server and set to listen on 0.0.0.0:2121 -- allows local network connections
     address = ('0.0.0.0', 2121)
     server = servers.FTPServer(address, handler)
 
-    # start ftp server
+    ##Start server, listens forever
     server.serve_forever()
 
+##Run server
 if __name__ == '__main__':
-    main()
+    main(user, password)
+
+##Not sure if need "masquerade address" and "range of ports to use" for passive connection -- used if behind a NAT? 
