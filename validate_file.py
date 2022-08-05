@@ -17,6 +17,7 @@ def verify_data(file_data):
     check_header(file_data.head(1))
     remove_empty(file_data)
     #if file still has data after removing empty
+    check_num_rows(file_data)
     check_num_columns(file_data)
     check_ids(file_data) #TODO if keeping data after removing empty, need to use new data
     check_timestamp(file_data)
@@ -105,15 +106,19 @@ def check_readings(file_data):
 path = 'temp' #TODO - ensure file is saved in correct location
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
-    print(file_name)
+     is_invalid = False
      #check file contains data
-     #TODO remove comment tag if os.stat(file_name).st.size == 0:
+     if os.stat(file_name).st_size == 0:
         #TODO make note of error
-        #flag to move to delete
-        #TODO remove comm tempstring = "" #TODO remove
-     ##TODO else:
-        #TODO file_data = pandas.read_csv(file_name)
-        #TODO verify_data(file_data)
+        #removes data from file name to create log name
+        log_name = file_name.replace(".csv", "")
+        #adds error to log file
+        with open(log_name +"_log.txt", "w") as log_file:
+            log_file.write("Error 100 - Empty File\n")
+        is_invalid = True
+     else:
+        file_data = pandas.read_csv(file_name)
+        verify_data(file_data)
     # TODO pass error flags to GUI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to
     # create a sensible (calendar based) directory system hierarchy - year, month, day
     # if log files exists, but not flagged to delete, still display warnings on GUI, move file and log both to archive
