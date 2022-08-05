@@ -7,7 +7,7 @@ import os
 # TODO implement/design error system
 # TODO code
 # TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
-# TODO automatically fix certain aspects e.g incorrect header
+# TODO test with more smaple data (bad)
 # TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
 # modification of data and/or code - where is this necessary
 
@@ -50,6 +50,11 @@ def remove_empty(file_data):
     # if rows are not removed, do not flag for deletion
     return #TODO change to flag and possibly modified file if decide to allow rows to be removed
 
+def check_num_rows(file_data):
+    #tally rows
+    #should be one header and 10 data rows
+    return #TODO change
+
 def check_ids(file_data):
     #TODO implement
     # create empty set 
@@ -76,6 +81,7 @@ def check_num_columns(file_data):
     # break?
     return #TODO change to flag
 
+
 def check_timestamp(file_data):
     # for row in file (not first one)
     # get second(?) row value
@@ -99,14 +105,15 @@ def check_readings(file_data):
 path = 'temp' #TODO - ensure file is saved in correct location
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
+    print(file_name)
      #check file contains data
-     if os.stat(file_name).st.size == 0:
+     #TODO remove comment tag if os.stat(file_name).st.size == 0:
         #TODO make note of error
         #flag to move to delete
-        tempstring = "" #TODO remove
-     else:
-        file_data = pandas.read_csv(file_name)
-        verify_data(file_data)
+        #TODO remove comm tempstring = "" #TODO remove
+     ##TODO else:
+        #TODO file_data = pandas.read_csv(file_name)
+        #TODO verify_data(file_data)
     # TODO pass error flags to GUI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to
     # create a sensible (calendar based) directory system hierarchy - year, month, day
     # if log files exists, but not flagged to delete, still display warnings on GUI, move file and log both to archive
