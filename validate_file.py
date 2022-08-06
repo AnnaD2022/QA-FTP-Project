@@ -1,7 +1,9 @@
 import csv
+from fileinput import filename
 import pandas
 import glob
 import os
+import difflib
 
 # Things to test:
 # TODO implement/design error system
@@ -10,38 +12,54 @@ import os
 # TODO test with more smaple data (bad)
 # TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
 # modification of data and/or code - where is this necessary
+# TODO can you have a missing header line? if so, code for this
 
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest?
-def verify_data(file_data):
-    check_header(file_data.head(1))
-    remove_empty(file_data)
+def verify_data(file_data, file_name):
+    check_header(file_data, file_name)
+    remove_empty(file_data, file_name)
     #if file still has data after removing empty
-    check_num_rows(file_data)
-    check_num_columns(file_data)
-    check_ids(file_data) #TODO if keeping data after removing empty, need to use new data
-    check_timestamp(file_data)
-    check_readings(file_data)
+    check_num_rows(file_data, file_name)
+    check_num_columns(file_data, file_name)
+    check_ids(file_data, file_name) #TODO if keeping data after removing empty, need to use new data
+    check_timestamp(file_data, file_name)
+    check_readings(file_data, file_name)
     return #TODO change - delete/accept/fail flag
 
-def check_header(header):
-    #TODO implement
-    # compare header to correct string
-    # if they are not the same and header line exists partially (even if incorrect)
-    # generate string noting difference
-    # generate error code
-    # save to log file (check if already exists)
-    # do not mark to delete
-    # overwrite incorrect header with correct string
-    # elif they are not the same and header line does not exist
-    # insert header line if possible, if not possible mark to delete
-    # generate error code & message
-    # save to log file (check if already exists)
-    # else (header file is correct)
-    # do not mark to delete
-    return #TODO change to flag
+def check_header(file_data, file_name):
+    correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
+ 'reading5' 'reading6' 'reading7' 'reading8' 'reading9' 'reading10']"""
+    header = str(file_data.columns.values) #check is not readings
+    if(header != correct_header):
+        difference = difflib.SequenceMatcher(None, correct_header, header)
+        diff_string = ""
+        for change, start1, end1, start2, end2 in difference.get_opcodes():
+            if change == 'equal':
+                diff_string += correct_header[start1:end1]
+            elif change == 'insert':
+                diff_string += "(inserted: " + header[start2:end2] + ")"
+            elif change == 'delete':
+                diff_string += "(deleted: " + correct_header[start1:end1] + ")"
+            elif change == 'replace':
+                diff_string += "(replaced: " + correct_header[start1:end1] + " with " + header[start2:end2] + ")"
+            else:
+                diff_string = "unknown format error"
+        
+        log_name = file_name.replace(".csv", "")
+        #adds error to log file
+        with open(log_name +"_log.txt", "w") as log_file:
+            log_file.write("Error 200 - Incorrect Header. Errors:" + diff_string + " . Header was repaired.")
 
-def remove_empty(file_data):
+        # overwrite incorrect header with correct string
+        file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
+        'reading5', 'reading6', 'reading7', 'reading8','reading9', 'reading10']
+        file_data.to_csv(".\\"+ file_name, index = False)
+        
+    # do not mark to delete as any errors would have been repaired
+    return
+
+def remove_empty(file_data, file_name):
     #TODO implement
     # remove any rows with empty fields (pandas)
     # if rows are removed
@@ -51,12 +69,12 @@ def remove_empty(file_data):
     # if rows are not removed, do not flag for deletion
     return #TODO change to flag and possibly modified file if decide to allow rows to be removed
 
-def check_num_rows(file_data):
+def check_num_rows(file_data, file_name):
     #tally rows
     #should be one header and 10 data rows
     return #TODO change
 
-def check_ids(file_data):
+def check_ids(file_data, file_name):
     #TODO implement
     # create empty set 
     # by default do not flag for deletion
@@ -74,7 +92,7 @@ def check_ids(file_data):
     # flag for deletion (and either break or keep going depending on above)
     return #TODO change to flag
 
-def check_num_columns(file_data):
+def check_num_columns(file_data, file_name):
     # for row in file,
     # get num values (count? string parsing? pandas?)
     # should be 12 to a row, no more/less
@@ -83,7 +101,7 @@ def check_num_columns(file_data):
     return #TODO change to flag
 
 
-def check_timestamp(file_data):
+def check_timestamp(file_data, file_name):
     # for row in file (not first one)
     # get second(?) row value
     # check is valid time (use regex or datetime datatype)
@@ -91,7 +109,7 @@ def check_timestamp(file_data):
     # break?
     return #TODO change to flag
 
-def check_readings(file_data):
+def check_readings(file_data, file_name):
     # for row in file (not header)
     # for each reading
     # check if float - can fix if int
@@ -109,7 +127,6 @@ for file_name in files_to_check: # assume file name is in correct format and fil
      is_invalid = False
      #check file contains data
      if os.stat(file_name).st_size == 0:
-        #TODO make note of error
         #removes data from file name to create log name
         log_name = file_name.replace(".csv", "")
         #adds error to log file
@@ -118,7 +135,7 @@ for file_name in files_to_check: # assume file name is in correct format and fil
         is_invalid = True
      else:
         file_data = pandas.read_csv(file_name)
-        verify_data(file_data)
+        verify_data(file_data, file_name)
     # TODO pass error flags to GUI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to
     # create a sensible (calendar based) directory system hierarchy - year, month, day
     # if log files exists, but not flagged to delete, still display warnings on GUI, move file and log both to archive
