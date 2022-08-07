@@ -4,12 +4,16 @@ import pandas
 import glob
 import os
 import difflib
+import numpy
 
 # Things to test:
 # TODO implement/design error system
 # TODO code
+# TODO add test case for completely missing data
+# TODO ask/check if each file msut have 10 rows
 # TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
 # TODO test with more smaple data (bad)
+# TODO double check catches all null values
 # TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
 # modification of data and/or code - where is this necessary
 # TODO can you have a missing header line? if so, code for this
@@ -17,7 +21,7 @@ import difflib
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest?
 def verify_data(file_data, file_name):
-    check_header(file_data, file_name)
+    #TODO uncomment check_header(file_data, file_name)
     remove_empty(file_data, file_name)
     #if file still has data after removing empty
     check_num_rows(file_data, file_name)
@@ -30,7 +34,7 @@ def verify_data(file_data, file_name):
 def check_header(file_data, file_name):
     correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
  'reading5' 'reading6' 'reading7' 'reading8' 'reading9' 'reading10']"""
-    header = str(file_data.columns.values) #check is not readings
+    header = str(file_data.columns.values)
     if(header != correct_header):
         difference = difflib.SequenceMatcher(None, correct_header, header)
         diff_string = ""
@@ -60,14 +64,24 @@ def check_header(file_data, file_name):
     return
 
 def remove_empty(file_data, file_name):
-    #TODO implement
-    # remove any rows with empty fields (pandas)
-    # if rows are removed
-    # generate error code + info
-    # save to log file (check if already exists)
-    # flag for deletion (?) - if not check to see if file is empty, if yes log error flag for deletion, if not do not flag for deletion
-    # if rows are not removed, do not flag for deletion
-    return #TODO change to flag and possibly modified file if decide to allow rows to be removed
+    # find "coordinates" of empty fields
+    x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
+    if(y_coord.size > 0):
+        error_string = ""
+        columns = x_coord.tolist()
+        rows = y_coord.tolist()
+        for x in range(0, len(columns)):
+            error_string += " Column: " + columns[x] + " Row: " + str(rows[x]) + "."
+        
+        log_name = file_name.replace(".csv", "")
+        #add error to log file
+        with open(log_name +"_log.txt", "w") as log_file:
+            log_file.write("Error 300 - Missing Values" + error_string)
+        
+        #TODO check if should just remove
+        return True
+
+    return False
 
 def check_num_rows(file_data, file_name):
     #tally rows
