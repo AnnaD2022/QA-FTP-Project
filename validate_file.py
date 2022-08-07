@@ -9,7 +9,9 @@ import numpy
 # Things to test:
 # TODO implement/design error system
 # TODO code
+# TODO add taest case with multiple errors 
 # TODO add test case for completely missing data
+# TODO add test case for incorrect num rows (too high and too low)
 # TODO ask/check if each file msut have 10 rows
 # TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
 # TODO test with more smaple data (bad)
@@ -21,7 +23,7 @@ import numpy
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest?
 def verify_data(file_data, file_name):
-    #TODO uncomment check_header(file_data, file_name)
+    check_header(file_data, file_name)
     remove_empty(file_data, file_name)
     #if file still has data after removing empty
     check_num_rows(file_data, file_name)
@@ -29,13 +31,13 @@ def verify_data(file_data, file_name):
     check_ids(file_data, file_name) #TODO if keeping data after removing empty, need to use new data
     check_timestamp(file_data, file_name)
     check_readings(file_data, file_name)
-    return #TODO change - delete/accept/fail flag
+    return #TODO change - delete/accept/fail flag - combine results of calls?
 
 def check_header(file_data, file_name):
     correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
  'reading5' 'reading6' 'reading7' 'reading8' 'reading9' 'reading10']"""
     header = str(file_data.columns.values)
-    if(header != correct_header):
+    if header != correct_header:
         difference = difflib.SequenceMatcher(None, correct_header, header)
         diff_string = ""
         for change, start1, end1, start2, end2 in difference.get_opcodes():
@@ -53,7 +55,7 @@ def check_header(file_data, file_name):
         log_name = file_name.replace(".csv", "")
         #adds error to log file
         with open(log_name +"_log.txt", "w") as log_file:
-            log_file.write("Error 200 - Incorrect Header. Errors:" + diff_string + " . Header was repaired.")
+            log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.")
 
         # overwrite incorrect header with correct string
         file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
@@ -66,7 +68,7 @@ def check_header(file_data, file_name):
 def remove_empty(file_data, file_name):
     # find "coordinates" of empty fields
     x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
-    if(y_coord.size > 0):
+    if y_coord.size > 0:
         error_string = ""
         columns = x_coord.tolist()
         rows = y_coord.tolist()
@@ -76,35 +78,55 @@ def remove_empty(file_data, file_name):
         log_name = file_name.replace(".csv", "")
         #add error to log file
         with open(log_name +"_log.txt", "w") as log_file:
-            log_file.write("Error 300 - Missing Values" + error_string)
+            log_file.write("Error 300 - Missing Values - " + error_string)
         
         #TODO check if should just remove
         return True
 
     return False
 
+#TODO check if need this
 def check_num_rows(file_data, file_name):
-    #tally rows
-    #should be one header and 10 data rows
-    return #TODO change
+    if len(file_data.index) == 10:
+        return False
+    else:
+        log_name = file_name.replace(".csv", "")
+        #add error to log file
+        with open(log_name +"_log.txt", "w") as log_file:
+            log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.")
+        return True
 
+#TODO add test cases for all incorrect id types
 def check_ids(file_data, file_name):
-    #TODO implement
-    # create empty set 
+    batch_id_set = set()
     # by default do not flag for deletion
-    # for row in file_data (pandas)
-    # batch_id = row[0]
-    # if batch_id is positive int
-    # if batch_id is in set
-    # log error and details
-    # flag for removal
-    # break or dont depending if want check for repeat warnings
-    # else
-    # add batch_id to set
-    # else
-    # log error and message (either for each incorrect row or just once)
-    # flag for deletion (and either break or keep going depending on above)
-    return #TODO change to flag
+    is_invalid = False
+    batch_ids = file_data['batch_id'].tolist()
+    for id in batch_ids:
+    # TODO check if having string batch id will crash this
+    #TODO check if id can be 0
+        if type(id) == int and id > 0:
+            if id in batch_id_set:
+                is_invalid = True
+                error = "Duplicate ID: " + str(id)
+                break #TODO check if want repeat warnings - may not need to break
+            else:
+                batch_id_set.add(id)
+        elif type(id) != int:
+            is_invalid = True
+            error = "Invalid data type: " + str(type(id))
+            break
+        else:
+            is_invalid = True
+            error = "Negative ID: " + str(id)
+            break
+
+    if is_invalid:
+        log_name = file_name.replace(".csv", "")
+        with open(log_name +"_log.txt", "w") as log_file:
+            log_file.write("Error 500 - Invalid Batch ID - " + error)
+
+    return is_invalid
 
 def check_num_columns(file_data, file_name):
     # for row in file,
