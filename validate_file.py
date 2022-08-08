@@ -7,9 +7,7 @@ import difflib
 import numpy
 
 # Things to test:
-# TODO implement/design error system
-# TODO code
-# TODO add taest case with multiple errors 
+# TODO add taest case with multiple errors e.g. header and something else
 # TODO add test case for completely missing data
 # TODO add test case for incorrect num rows (too high and too low)
 # TODO ask/check if each file msut have 10 rows
@@ -19,6 +17,8 @@ import numpy
 # TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
 # modification of data and/or code - where is this necessary
 # TODO can you have a missing header line? if so, code for this
+# TODO test case for "too many" header columns with data - does it crash when header is fixed?
+# TODO test case for too many values (but correct header)
 
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest? - no - return if failed
@@ -128,12 +128,17 @@ def check_ids(file_data, file_name):
     return is_invalid
 
 def check_num_columns(file_data, file_name):
-    # for row in file,
-    # get num values (count? string parsing? pandas?)
-    # should be 12 to a row, no more/less
-    # if not 12 flag for deletion, log error and comment
-    # break?
-    return #TODO change to flag
+    is_invalid = False
+    for x in range(10):
+        row = file_data.iloc[x]
+        if len(row) != 12:
+            error = "Error 600 - Too Many Values - " + str(len(row)) + " columns instead of 10 on line " + str(x + 1)
+            log_name = file_name.replace(".csv", "")
+            with open(log_name +"_log.txt", "a+") as log_file:
+                log_file.write(error)
+            is_invalid = True
+            break
+    return is_invalid
 
 
 def check_timestamp(file_data, file_name):

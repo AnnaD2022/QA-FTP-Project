@@ -16,3 +16,4 @@ The system produces error codes denoting problems with invalid files, which are 
 - 300 - Missing Values
 - 400 - Incorrect Number of Rows
 - 500 - Invalid Batch ID
+- 600 - Too Many Values
