@@ -30,9 +30,9 @@ ftp.close()
 
 ##TODO:
 #loop all filenames returned
-#if .csv, download regardless
-##if full correct filename format, into valid name folder
-##else put in deleted and flag
+##download all valid filenames into to_check
+##download invalid filenames not in downloaded.txt into to_check
+##log downloads
 
 ##TODO - regex .csv, regex full valid title.csv -> download into separate folders
 ##TODO - check filenames against existing list --> only download new files for the given day
@@ -40,3 +40,5 @@ ftp.close()
 ##TODO - sort file hierarchy in downloads -> communicate this to file handler
 ##TODO - make function to call that auto downloads given day's files
 ##TODO - add error handling for ftp connections
+##TODO - make engine.py to be called from GUI -- needs to accept CLI for cronjob
+
