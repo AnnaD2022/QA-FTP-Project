@@ -21,14 +21,13 @@ import numpy
 # TODO can you have a missing header line? if so, code for this
 
 # perform checks to test correctness of file
-#TODO if flagged for deletion in one test, do you perform the rest?
+#TODO if flagged for deletion in one test, do you perform the rest? - no - return if failed
 def verify_data(file_data, file_name):
     check_header(file_data, file_name)
     remove_empty(file_data, file_name)
-    #if file still has data after removing empty
     check_num_rows(file_data, file_name)
     check_num_columns(file_data, file_name)
-    check_ids(file_data, file_name) #TODO if keeping data after removing empty, need to use new data
+    check_ids(file_data, file_name)
     check_timestamp(file_data, file_name)
     check_readings(file_data, file_name)
     return #TODO change - delete/accept/fail flag - combine results of calls?
@@ -54,7 +53,7 @@ def check_header(file_data, file_name):
         
         log_name = file_name.replace(".csv", "")
         #adds error to log file
-        with open(log_name +"_log.txt", "w") as log_file:
+        with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.")
 
         # overwrite incorrect header with correct string
@@ -65,7 +64,7 @@ def check_header(file_data, file_name):
     # do not mark to delete as any errors would have been repaired
     return
 
-def remove_empty(file_data, file_name):
+def remove_empty(file_data, file_name): #TODO rename
     # find "coordinates" of empty fields
     x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
     if y_coord.size > 0:
@@ -77,7 +76,7 @@ def remove_empty(file_data, file_name):
         
         log_name = file_name.replace(".csv", "")
         #add error to log file
-        with open(log_name +"_log.txt", "w") as log_file:
+        with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 300 - Missing Values - " + error_string)
         
         #TODO check if should just remove
@@ -92,7 +91,7 @@ def check_num_rows(file_data, file_name):
     else:
         log_name = file_name.replace(".csv", "")
         #add error to log file
-        with open(log_name +"_log.txt", "w") as log_file:
+        with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.")
         return True
 
@@ -123,7 +122,7 @@ def check_ids(file_data, file_name):
 
     if is_invalid:
         log_name = file_name.replace(".csv", "")
-        with open(log_name +"_log.txt", "w") as log_file:
+        with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 500 - Invalid Batch ID - " + error)
 
     return is_invalid
@@ -158,6 +157,7 @@ def check_readings(file_data, file_name):
 # main
 # take in all csv files that have been requested from the server and not yet verified
 path = 'temp' #TODO - ensure file is saved in correct location
+# TODO change path to "to check"
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
      is_invalid = False
@@ -166,7 +166,7 @@ for file_name in files_to_check: # assume file name is in correct format and fil
         #removes data from file name to create log name
         log_name = file_name.replace(".csv", "")
         #adds error to log file
-        with open(log_name +"_log.txt", "w") as log_file:
+        with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 100 - Empty File\n")
         is_invalid = True
      else:
@@ -179,4 +179,6 @@ for file_name in files_to_check: # assume file name is in correct format and fil
     # TODO could do warnings per file or add file to list that is sent to gui at end, told to check logs for more info e.g. FILENAME has errors
     # but has been repaired - check LOGNAME in archive for details.  FILENAME has errors and cannot be repaired - see LOGNAME in delete for 
     # details
-    # TODO if not passed but fixable/ not too bad? - go into “failed”?
+    # TODO add "success code" - every file should have a "help" file - change rather than log
+    # TODO make sure that 
+    # TODO have calendar structure in rejected directory

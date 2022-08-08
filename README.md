@@ -6,6 +6,7 @@ Repo to store project files for task set by QA regarding download + verification
 
 - pyftpdlib
 - pandas
+- tkcalendar
 
 ## ERROR CODES
 
