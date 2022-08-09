@@ -4,7 +4,8 @@ import pandas
 import glob
 import os
 import difflib
-import numpy
+import re
+
 
 # Things to test:
 # TODO add taest case with multiple errors e.g. header and something else
@@ -19,6 +20,7 @@ import numpy
 # TODO can you have a missing header line? if so, code for this
 # TODO test case for "too many" header columns with data - does it crash when header is fixed?
 # TODO test case for too many values (but correct header)
+# TODO test timestamp checker - vslid and invalid
 
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest? - no - return if failed
@@ -142,12 +144,18 @@ def check_num_columns(file_data, file_name):
 
 
 def check_timestamp(file_data, file_name):
-    # for row in file (not first one)
-    # get second(?) row value
-    # check is valid time (use regex or datetime datatype)
-    # if invalid, flag for deletion and log error and comment
-    # break?
-    return #TODO change to flag
+    is_invalid = False
+    for x in range(10):
+        time = file_data['timestamp'].values[x]
+        pattern = re.compile("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$")
+        if pattern.fullmatch(time) is None:
+            error = "Error 700 - Incorrect Timestamp - \"" + time + "\" on line " + str(x + 1)
+            log_name = file_name.replace(".csv", "")
+            with open(log_name +"_log.txt", "a+") as log_file:
+                log_file.write(error)
+            is_invalid = True
+            break
+    return is_invalid
 
 def check_readings(file_data, file_name):
     # for row in file (not header)
@@ -162,7 +170,7 @@ def check_readings(file_data, file_name):
 # main
 # take in all csv files that have been requested from the server and not yet verified
 path = 'temp' #TODO - ensure file is saved in correct location
-# TODO change path to "to check"
+# TODO change path to "to check" when all testing  done
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
      is_invalid = False
