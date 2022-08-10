@@ -8,11 +8,11 @@ import re
 
 
 # Things to test:
-# TODO add taest case with multiple errors e.g. header and something else
+# TODO redo temp
+# TODO add test case with multiple errors e.g. header and something else
 # TODO add test case for completely missing data
 # TODO add test case for incorrect num rows (too high and too low)
 # TODO ask/check if each file msut have 10 rows
-# TODO use pandas library for sanitisation + some checks (w3schools data cleaning)
 # TODO test with more smaple data (bad)
 # TODO double check catches all null values
 # TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
@@ -21,6 +21,11 @@ import re
 # TODO test case for "too many" header columns with data - does it crash when header is fixed?
 # TODO test case for too many values (but correct header)
 # TODO test timestamp checker - vslid and invalid
+# TODO make sure well commented
+# TODO check that the class_function_descriptors is correct
+# TODO ask if need ending 0s
+# TODO test all cases for incorrect readings
+# TODO check if 0 is a valid reading
 
 # perform checks to test correctness of file
 #TODO if flagged for deletion in one test, do you perform the rest? - no - return if failed
@@ -38,6 +43,7 @@ def check_header(file_data, file_name):
     correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
  'reading5' 'reading6' 'reading7' 'reading8' 'reading9' 'reading10']"""
     header = str(file_data.columns.values)
+    #if header is incorrect, generate a string describing what is wrong
     if header != correct_header:
         difference = difflib.SequenceMatcher(None, correct_header, header)
         diff_string = ""
@@ -54,7 +60,7 @@ def check_header(file_data, file_name):
                 diff_string = "unknown format error"
         
         log_name = file_name.replace(".csv", "")
-        #adds error to log file
+        #add error to log file
         with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.")
 
@@ -69,10 +75,12 @@ def check_header(file_data, file_name):
 def remove_empty(file_data, file_name): #TODO rename
     # find "coordinates" of empty fields
     x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
+    #if there are any empty fiends
     if y_coord.size > 0:
         error_string = ""
         columns = x_coord.tolist()
         rows = y_coord.tolist()
+        #generate a string denoting where all the empty fields are
         for x in range(0, len(columns)):
             error_string += " Column: " + columns[x] + " Row: " + str(rows[x]) + "."
         
@@ -158,14 +166,50 @@ def check_timestamp(file_data, file_name):
     return is_invalid
 
 def check_readings(file_data, file_name):
-    # for row in file (not header)
-    # for each reading
-    # check if float - can fix if int
-    # check formatted up to 3 dp - fix if wrong, report error but dont flag to delete
-    # check not less than 0 or greater than 9.9
-    # if unfixable error either remove and report or flag for deletion and report
-    # different error code for each type of error. also imp will change based on if want to break after one error or keep checking for all errors
-    return #TODO change to flag
+    #for each reading in each row
+    for x in range(10):
+        readings = file_data.loc[x, 'reading1':'reading10']
+        for y in range(len(readings)):
+            value = readings[y]
+             # check if correct datatype (float)
+            if type(value) != float:
+                if type(value) == int:
+                    # cast to float
+                    file_data.at[x, file_data.columns[y+2]] = format(value, ".2f")
+                    #save updated dataframe to file
+                    file_data.to_csv(".\\"+ file_name, index = False)
+                    log_name = file_name.replace(".csv", "")
+                    #add error to log file
+                    with open(log_name +"_log.txt", "a+") as log_file:
+                        log_file.write("Error 800 - Int, Not Float - Row: " + str(x+1) + " Column: " +  + " . Cast as float.")
+                else:
+                    #cannot fix error, so log and return that the tests failed
+                    log_name = file_name.replace(".csv", "")
+                    #add error to log file
+                    with open(log_name +"_log.txt", "a+") as log_file:
+                        log_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2])
+                    return True
+            
+            #get all numbers after decimal point
+            decimal_places = str(value).split(".")[1]
+            #if there are more than 3 decimal places
+            if len(decimal_places > 3):
+                #round the value and save amended data to file
+                file_data.at[x, file_data.columns[y+2]] = round(value, 3)
+                file_data.to_csv(".\\"+ file_name, index = False)
+                log_name = file_name.replace(".csv", "")
+                #do not need to return invalid as error has been fixed
+                with open(log_name +"_log.txt", "a+") as log_file:
+                        log_file.write("Error 802 - Incorrect Rounding - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + ". Fixed rounding.")
+
+            #check values are in range
+            if not (0 < value < 10):
+                log_name = file_name.replace(".csv", "")
+                with open(log_name +"_log.txt", "a+") as log_file:
+                        log_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2])
+                return True
+    #if all values pass all test, return that the file is not invalid
+    return False
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
