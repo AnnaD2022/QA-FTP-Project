@@ -1,10 +1,11 @@
-import csv
+
 from fileinput import filename
 import pandas
 import glob
 import os
 import difflib
 import re
+import shutil
 
 
 # Things to test:
@@ -213,29 +214,47 @@ def check_readings(file_data, file_name):
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
-path = 'temp' #TODO - ensure file is saved in correct location
-# TODO change path to "to check" when all testing  done
+path = 'temp'# TODO change path to "to check" when all testing  done
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
-     is_invalid = False
-     #check file contains data
-     if os.stat(file_name).st_size == 0:
+    is_invalid = False
+    #if file is empty
+    if os.stat(file_name).st_size == 0:
         #removes data from file name to create log name
         log_name = file_name.replace(".csv", "")
         #adds error to log file
         with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 100 - Empty File\n")
         is_invalid = True
-     else:
+    else:
+        #get file data and perform validity checks on it
         file_data = pandas.read_csv(file_name)
-        verify_data(file_data, file_name)
-    # TODO pass error flags to GUI to display - iff passes all tests, can move to permanent archive location (from temp area) - need to
-    # create a sensible (calendar based) directory system hierarchy - year, month, day
-    # if log files exists, but not flagged to delete, still display warnings on GUI, move file and log both to archive
-    # if flagged to delete, pass error flags to GUI and move both file and log to delete
+        is_invalid = verify_data(file_data, file_name)
+    
+    #get data from filename to use in directory system
+    year = file_name[9:13]
+    month = file_name[13:15]
+    day = file_name[15:17]
+    #create path name to save to based on validity of file
+    if is_invalid:
+        desired_path = 'files/rejected/' + year + '/' + month + '/' + day + '/'
+    else:
+        desired_path = 'files/successful/' + year + '/' + month + '/' + day + '/'
+        #create log denoting a valid file
+        log_name = file_name.replace(".csv", "")
+        with open(log_name +"_log.txt", "a+") as log_file:
+            log_file.write("000 - Valid File\n")
+
+    #if the correct location in the file system does not exist, create it
+    if not (os.path.exists(path)):
+       os.makedirs(path)
+
+    #move file and log to correct directory
+    shutil.move("temp/" + file_name, desired_path + file_name)
+    log_name = file_name.replace(".csv", "") + "_log.txt"
+    shutil.move("temp/" + log_name, desired_path + log_name)       
+
     # TODO could do warnings per file or add file to list that is sent to gui at end, told to check logs for more info e.g. FILENAME has errors
     # but has been repaired - check LOGNAME in archive for details.  FILENAME has errors and cannot be repaired - see LOGNAME in delete for 
     # details
-    # TODO add "success code" - every file should have a "help" file - change rather than log
-    # TODO make sure that 
-    # TODO have calendar structure in rejected directory
+    # TODO change log to info/help file
