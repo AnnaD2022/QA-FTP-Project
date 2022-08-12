@@ -56,8 +56,8 @@
 
 |Test|Inputs|Expected Outcome| pass/fail | links |
 |----|------|----------------|-----------|-------|
-| test_cts1 |file_data: pandas.read_csv(testDoc1Valid.csv)<br>file_name: testDoc1Valid.csv | function will return False without producing a log file| | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py) <br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/testDoc1Valid.csv) <br><br>  [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_timestamp.py)|
-| test_cts2| file_data: pandas.read_csv(testDoc5InvalidTS.csv)<br>file_name: testDoc5InvalidTS.csv| A log file with the name: testDoc5InvalidTS_log.txt will be created containing the message "Error 700 - Incorrect Timestamp -\ 20-20-20 \ on line 11" | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/testDoc5InvalidTS.csv) <br><br>  [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/test_timestamp.py)|
+| test_cts1 |file_data: pandas.read_csv(testDoc1Valid.csv)<br>file_name: testDoc1Valid.csv | function will return False without producing a log file| Pass 12/08/2022 | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py) <br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/testDoc1Valid.csv) <br><br>  [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_timestamp.py)|
+| test_cts2| file_data: pandas.read_csv(testDoc5InvalidTS.csv)<br>file_name: testDoc5InvalidTS.csv| A log file with the name: testDoc5InvalidTS_log.txt will be created containing the message "Error 700 - Incorrect Timestamp -\ 20-20-20 \ on line 11" | Passed 12/08/2022| [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/testDoc5InvalidTS.csv) <br><br>  [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/test_timestamp.py)|
 
 #### check_readings:
 
