@@ -8,8 +8,9 @@ class HeaderUnitTest(unittest.TestCase):
       #Tests for the validate_file module
       def test_ch1(self):
           # should return without issue as its is testing a file with valid headings
-          self.assertTrue(check_header(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
-      
+          self.assertIsNone(check_header(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
+           # Passed 12/08/2022
+     
       def test_ch2(self):
           # checks log file is generated following incorrect heading inclusion
           check_header(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv")
