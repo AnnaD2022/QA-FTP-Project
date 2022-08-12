@@ -1,4 +1,3 @@
-
 from fileinput import filename
 import pandas
 import glob
@@ -27,18 +26,26 @@ import shutil
 # TODO ask if need ending 0s
 # TODO test all cases for incorrect readings
 # TODO check if 0 is a valid reading
+# TODO make sure all todos finished
 
-# perform checks to test correctness of file
-#TODO if flagged for deletion in one test, do you perform the rest? - no - return if failed
+# perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
+    #if flagged for deletion in one test, do not perform the rest
     check_header(file_data, file_name)
-    remove_empty(file_data, file_name)
-    check_num_rows(file_data, file_name)
-    check_num_columns(file_data, file_name)
-    check_ids(file_data, file_name)
-    check_timestamp(file_data, file_name)
-    check_readings(file_data, file_name)
-    return #TODO change - delete/accept/fail flag - combine results of calls?
+    if not (remove_empty(file_data, file_name)):
+        if not (check_num_rows(file_data, file_name)):
+            if not (check_num_columns(file_data, file_name)):
+                if not (check_ids(file_data, file_name)):
+                    if not (check_timestamp(file_data, file_name)):
+                        return check_readings(file_data, file_name)
+                else:
+                    return True
+            else:
+                return True
+        else:
+            return True
+    else:
+        return True
 
 def check_header(file_data, file_name):
     correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
