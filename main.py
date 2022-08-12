@@ -9,10 +9,10 @@ from tkcalendar import Calendar
 from datetime import *
 from ctypes import windll
 
-
 def checkDate():
-    filenames = []
-    dates = []
+    global filenames
+    global dates
+    # ESJ altered definition of filenames and dates making them global - this will enable me to directly access them in testing.
 
     path = "C:/Users/delegate119/Documents/GitHub/QA-FTP-Project/temp"
     for filename in os.listdir(path):
@@ -28,7 +28,6 @@ def checkDate():
                 filenames.append(filename)
             except:
                 continue
-
 
 def dateLogic():
     today = date.today()
