@@ -63,7 +63,7 @@ def check_header(file_data, file_name):
         log_name = file_name.replace(".csv", "")
         #add error to log file
         with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.")
+            log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.\n")
 
         # overwrite incorrect header with correct string
         file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
@@ -88,7 +88,7 @@ def remove_empty(file_data, file_name): #TODO rename
         log_name = file_name.replace(".csv", "")
         #add error to log file
         with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 300 - Missing Values - " + error_string)
+            log_file.write("Error 300 - Missing Values - " + error_string + "\n")
         
         #TODO check if should just remove
         return True
@@ -103,7 +103,7 @@ def check_num_rows(file_data, file_name):
         log_name = file_name.replace(".csv", "")
         #add error to log file
         with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.")
+            log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.\n")
         return True
 
 #TODO add test cases for all incorrect id types
@@ -119,7 +119,7 @@ def check_ids(file_data, file_name):
             if id in batch_id_set:
                 is_invalid = True
                 error = "Duplicate ID: " + str(id)
-                break #TODO check if want repeat warnings - may not need to break
+                break
             else:
                 batch_id_set.add(id)
         elif type(id) != int:
@@ -134,7 +134,7 @@ def check_ids(file_data, file_name):
     if is_invalid:
         log_name = file_name.replace(".csv", "")
         with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 500 - Invalid Batch ID - " + error)
+            log_file.write("Error 500 - Invalid Batch ID - " + error + "\n")
 
     return is_invalid
 
@@ -143,7 +143,7 @@ def check_num_columns(file_data, file_name):
     for x in range(10):
         row = file_data.iloc[x]
         if len(row) != 12:
-            error = "Error 600 - Too Many Values - " + str(len(row)) + " columns instead of 10 on line " + str(x + 1)
+            error = "Error 600 - Too Many Values - " + str(len(row)) + " columns instead of 10 on line " + str(x + 1) + "\n"
             log_name = file_name.replace(".csv", "")
             with open(log_name +"_log.txt", "a+") as log_file:
                 log_file.write(error)
@@ -158,7 +158,7 @@ def check_timestamp(file_data, file_name):
         time = file_data['timestamp'].values[x]
         pattern = re.compile("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$")
         if pattern.fullmatch(time) is None:
-            error = "Error 700 - Incorrect Timestamp - \"" + time + "\" on line " + str(x + 1)
+            error = "Error 700 - Incorrect Timestamp - \"" + time + "\" on line " + str(x + 1) + "\n"
             log_name = file_name.replace(".csv", "")
             with open(log_name +"_log.txt", "a+") as log_file:
                 log_file.write(error)
@@ -182,13 +182,13 @@ def check_readings(file_data, file_name):
                     log_name = file_name.replace(".csv", "")
                     #add error to log file
                     with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 800 - Int, Not Float - Row: " + str(x+1) + " Column: " +  + " . Cast as float.")
+                        log_file.write("Error 800 - Int, Not Float - Row: " + str(x+1) + " Column: " +  + " . Cast as float.\n")
                 else:
                     #cannot fix error, so log and return that the tests failed
                     log_name = file_name.replace(".csv", "")
                     #add error to log file
                     with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2])
+                        log_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                     return True
             
             #get all numbers after decimal point
@@ -201,13 +201,13 @@ def check_readings(file_data, file_name):
                 log_name = file_name.replace(".csv", "")
                 #do not need to return invalid as error has been fixed
                 with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 802 - Incorrect Rounding - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + ". Fixed rounding.")
+                        log_file.write("Error 802 - Incorrect Rounding - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + ". Fixed rounding.\n")
 
             #check values are in range
             if not (0 < value < 10):
                 log_name = file_name.replace(".csv", "")
                 with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2])
+                        log_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                 return True
     #if all values pass all test, return that the file is not invalid
     return False
