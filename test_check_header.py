@@ -1,15 +1,31 @@
 import unittest
-import pandas
+import pandas as pd
 
+from os.path import exists
 from validate_file import check_header
 
 class HeaderUnitTest(unittest.TestCase):
-      ""Tests for the validate_file module""
-#need to check
-      def test_return_type(self):
-          ""should return a boolean""
-          self.assertIsInstance(check_header(pandas.read_csv(testDoc1Valid.csv),testDoc1Valid),bool)
-          
+      #Tests for the validate_file module
+      def test_ch1(self):
+          # should return without issue as its is testing a file with valid headings
+          self.assertTrue(check_header(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
+      
+      def test_ch2(self):
+          # checks log file is generated following incorrect heading inclusion
+          check_header(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv")
+          self.assertTrue(exists('testDoc2invalid_log.txt'))
+          # Passed 12/08/2022
 
-if _name_ == 'main':
-   unittest.main(verebosity=2)
+      def test_ch3(self):
+          #checks log file is generated following identification of an additional heading
+          check_header(pd.read_csv('./tests/testDoc2.1Invalid.csv'),"testDoc2.1Invalid.csv")
+          self.assertTrue(exists('testDoc2.1Invalid_log.txt'))
+
+      def test_ch4(self):
+           #checks log file is generated following identification of a deleted heading
+          check_header(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv")
+          self.assertTrue(exists('testDoc3InvalidRC_log.txt'))         
+      # Passed 12/08/2022
+
+if __name__ == '__main__':
+   unittest.main()
