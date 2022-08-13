@@ -10,11 +10,10 @@ from datetime import *
 from ctypes import windll
 
 def checkDate():
-    global filenames
-    global dates
-    # ESJ altered definition of filenames and dates making them global - this will enable me to directly access them in testing.
+    filenames = []
+    dates = []
 
-    path = "C:/Users/delegate119/Documents/GitHub/QA-FTP-Project/temp"
+    path = "./temp" #esj replaced: C:/Users/delegate119/Documents/GitHub/QA-FTP-Project/temp with thepath name seen. This is because the removed path name was specific to the mian.py creators device and was not recognised when run on other devices
     for filename in os.listdir(path):
         if filename.endswith('.csv'):
             filename = filename.replace("MED_DATA_", "")
@@ -28,6 +27,10 @@ def checkDate():
                 filenames.append(filename)
             except:
                 continue
+    checkDate.filenames = filenames
+    checkDate.dates = dates
+    checkDate.path = path
+    # The above lines enable the filenames and dates arrays to be accessed in the checkDate test
 
 def dateLogic():
     today = date.today()

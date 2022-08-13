@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from main import checkDate
 
@@ -6,14 +7,34 @@ class ColNumUnitTest(unittest.TestCase):
       #Tests for the main module
 
       def test_cd1(self):
-          #check filenames array contains the correct filenames
+          #test purpose: check filenames array contains the correct filenames
+          #run CheckDate function
           checkDate()
-          self.assertEqual(["20210701153942.csv","20210701153947.csv","20210701153948.csv", "20210701153952.csv", "20210701153954.csv", "20220803153918.csv", "20220803153920.csv", "20220803153921.csv", "20220803153922.csv", "20220803153923.csv", "20220803153925.csv", "20220803153927.csv", "20220803153928.csv", "20220803153929.csv", "20220803153931.csv", "20220803153932.csv", "20220803155851.csv", "20220803155852.csv" , "20220803155853.csv" , "20220803155854.csv" , "20220803155855.csv" , "20220803155856.csv" , "20220803155857.csv" , "20220803155858.csv" , "20220803155859.csv" , "20220803155900.csv" , "20220803155901.csv" , "20220803160722.csv" , "20220803160723.csv" , "20220803160724.csv" , "20220803160725.csv" , "20220803160726.csv" , "20220803160727.csv" , "20220803160728.csv" , "20220803160729.csv" , "20220803160730.csv", "20220803160731.csv", "20220803160732.csv"], main.filenames)
+
+          #go through the directory that checkDate references, count the number of csv files <- indicates howmany file names you should have in the filenames array
+          x = 0 #will count the number of csv files present in checkDate referenced directory
+          for filename in os.listdir(checkDate.path):
+              if filename.endswith('.csv'):
+                 x += 1
+
+          #compare the expeted number of filenames with actual number.
+          self.assertEqual(x,len(checkDate.filenames))
+          #passes 13/08/2022
 
       def test_cd2(self):
-          #check dates array contains the correct dates
+          #test purpose: check dates array contains the correct dates
+          #run CheckDate function
           checkDate()
-          self.assertEqual(["2021/07/01","2021/07/01","2021/07/01", "2021/07/01", "2021/07/01", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03", "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" ,"2022/08/03" , "2022/08/03","2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03" , "2022/08/03", "2022/08/03", "2022/08/03"], main.dates)
+
+          #go through the directory that checkDate references, count the number of csv files <- indicates howmany dates you should have in the dates array
+          x = 0 #will count the number of csv files present in checkDate referenced directory
+          for filename in os.listdir(checkDate.path):
+              if filename.endswith('.csv'):
+                 x += 1
+
+          #compare the expeted number of filenames with actual number.
+          self.assertEqual(x,len(checkDate.dates))
+          #passes 13/08/2022
 
 
 if __name__ == '__main__':
