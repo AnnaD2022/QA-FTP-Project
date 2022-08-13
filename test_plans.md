@@ -13,6 +13,21 @@ The below test plans were created and implemented by EmilySJ (EthSpJo)
 
 ## validate_file:
 
+#### verify_data:
+
+|Test|Inputs|Expected Outcome| pass/fail | links |
+|----|------|----------------|-----------|-------|
+| test_vd1 | file_data: pandas.read_csv(testDoc1Valid.csv)<br>file_name: testDoc1Valid.csv | function will return without producing a log file as header values are valid | True will be returned | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/testDoc1Valid.csv) <br><br>  [Unit test file]()|
+| test_vd2 | file_data: pandas.read_csv(testDoc2invalid.csv)<br>file_name: testDoc2invalid.csv  | True | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py) <br><br>  [Tested document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests/testDoc2Invalid.csv) <br><br> [Unit test file]()|
+| test_vd3 | file_data: pandas.read_csv(testDoc7.3Invalid.csv)<br>file_name: testDoc7.3Invalid.csv  | True | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]()  |
+|test_vd4  | file_data: pandas.read_csv(testDoc7.4Invalid.csv)<br>file_name: testDoc7.4Invalid.csv  | True | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]() |
+|test_vd5 | file_data: pandas.read_csv(testDoc7.51Invalid.csv)<br>file_name: testDoc7.51Invalid.csv  | true| | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]() |
+|test_vd5.2 | file_data: pandas.read_csv(testDoc7.52Invalid.csv)<br>file_name: testDoc7.52Invalid.csv  | true| | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]() |
+|test_vd5.3 | file_data: pandas.read_csv(testDoc7.53Invalid.csv)<br>file_name: testDoc7.53Invalid.csv  | true| | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]() |
+|test_vd6  | file_data: pandas.read_csv(testDoc7.6Invalid.csv)<br>file_name: testDoc7.6Invalid.csv | True| | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]()|
+|test_vd7  | file_data: pandas.read_csv(testDoc7.71Invalid.csv)<br>file_name: testDoc7.71Invalid.csv  | False | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]()|
+|test_vd7.2  | file_data: pandas.read_csv(testDoc7.72Invalid.csv)<br>file_name: testDoc7.72Invalid.csv  | True | | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br><br>  [Tested document]() <br><br>  [Unit test file]()|
+
 #### check_header:
 
 |Test|Inputs|Expected Outcome| pass/fail | links |
