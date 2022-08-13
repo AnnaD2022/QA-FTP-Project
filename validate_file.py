@@ -5,6 +5,7 @@ import os
 import difflib
 import re
 import shutil
+import numpy
 
 
 # Things to test:
@@ -180,7 +181,7 @@ def check_readings(file_data, file_name):
         for y in range(len(readings)):
             value = readings[y]
              # check if correct datatype (float)
-            if type(value) != float:
+            if type(value) != numpy.float64: #line altered by ESJ, floats from csv are read in to have this type, use of float here causes issues
                 if type(value) == int:
                     # cast to float
                     file_data.at[x, file_data.columns[y+2]] = format(value, ".2f")
@@ -197,11 +198,11 @@ def check_readings(file_data, file_name):
                     with open(log_name +"_log.txt", "a+") as log_file:
                         log_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                     return True
-            
+
             #get all numbers after decimal point
             decimal_places = str(value).split(".")[1]
             #if there are more than 3 decimal places
-            if len(decimal_places > 3):
+            if len(decimal_places) > 3:
                 #round the value and save amended data to file
                 file_data.at[x, file_data.columns[y+2]] = round(value, 3)
                 file_data.to_csv(".\\"+ file_name, index = False)

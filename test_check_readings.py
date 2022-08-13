@@ -10,6 +10,7 @@ class checkReadingUnitTest(unittest.TestCase):
           # False should be returned as the file being checked has the desired number of readings
           self.assertFalse(check_readings(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
           #Fails 12/08/2022
+          #Passes 13/08/2022 - type check in validate_file fixed
 
       def test_cr2(self):
           # A log file containing error messages, etc should be produced as test file passed in has integer values.
