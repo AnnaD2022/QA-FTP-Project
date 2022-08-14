@@ -1,4 +1,4 @@
-bach_id,timestmp,reading1,reading2,reading3,reading4,reading5,reading4,reading7,reading8,reading9,reading10
+batch_id,timestamp,reading1,reading2,reading3,reading4,reading5,reading6,reading7,reading8,reading9,reading10
 30,15:58:52,6.261,4.387,7.4,4.312,9.942,3.39,3.969,4.817,8.232,4.673
 7,15:58:52,1.835,8.827,0.956,6.795,2.429,0.642,6.671,5.35,4.097,1.963
 197,15:58:52,7.44,3.125,3.15,8.934,3.93,4.309,7.664,7.273,1.538,3.666

@@ -13,6 +13,7 @@ Repo to store project files for task set by QA regarding download + verification
 The system produces error codes denoting problems with invalid files, which are stored in their respective log files:
 - 000 - Valid File (Logged without preceding "Error")
 - 100 - Empty File
+- 101 - Header Only
 - 200 - Incorrect Header
 - 201 - Fatal Incorrect Header
 - 300 - Missing Values

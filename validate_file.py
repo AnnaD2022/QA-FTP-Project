@@ -8,26 +8,11 @@ import shutil
 import numpy
 
 
-# Things to test:
-# TODO ask/check if each file msut have 10 rows
-# TODO ask if readings need ending 0s - readings under 3dp are valid but above 3dp are not
-# TODO check if 0 is a valid reading
 # TODO ask if still want to change log to info/help file
-# TODO assume bad filenames handled by server
-# TODO check if id can be 0
-# TODO check what happens if multiple incorrect batch ids - not sure if break in duplicate section will work, or in any of those sections for that matter, 
-#check all pathways - if doesnt work just remove breaks and change to nested if that checks for is_invalid false, else break or change to returns?
-# TODO add test case for multiple incorrect timestamps - check break works as intended
-# TODO rename remove_empty - tell chat
-# TODO check if break works for check num columns - multiple rows w incorrect lens
-# TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
-# TODO check if missing column completely causes errors with blanks when header is corrected?
-# TODO test case for "too many" header columns with data - does it crash when header is fixed?
-# TODO test case for completely missing header line
-# TODO check other file asked to check
-# TODO before tests are run change non date file names to have a date at the beginning of them so that they can be sorted into correct place
+# TODO rename remove_empty - tell chat and update documentation
+# TODO fixing header issue has removed the need for check num columns - tell chat + delete and update documentation
 # TODO change path files are fetched from
-# TODO message chat about assumptions
+# TODO if values under 3.dp are allowed, then remove checking for int as doesnt matter? - ask and update documentation
 
 # perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
@@ -39,6 +24,8 @@ def verify_data(file_data, file_name):
                     if not (check_ids(file_data, file_name)):
                         if not (check_timestamp(file_data, file_name)):
                             return check_readings(file_data, file_name)
+                        else:
+                            return True
                     else:
                         return True
                 else:
@@ -75,7 +62,7 @@ def check_header(file_data, file_name):
         try:
             file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
             'reading5', 'reading6', 'reading7', 'reading8','reading9', 'reading10']
-            file_data.to_csv(".\\"+ file_name, index = False)
+            file_data.to_csv(file_name, index = False)
             log_name = file_name.replace(".csv", "")
             #add error to log file
             with open(log_name +"_log.txt", "a+") as log_file:
@@ -85,8 +72,9 @@ def check_header(file_data, file_name):
         #if header cannot be repaired
         except ValueError as ve:
             #log error
+            log_name = file_name.replace(".csv", "")
             with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write("Error 201 -  Fatal Incorrect Header - Errors:" + diff_string + " . Header cannot be repaired due to error: " + ve + "\n")
+                log_file.write("Error 201 -  Fatal Incorrect Header - Errors:" + diff_string + " . Header cannot be repaired due to error: " + str(ve) + "\n")
             #return that file is invalud
             return True
     #return False as header is valid
@@ -103,7 +91,12 @@ def remove_empty(file_data, file_name):
         rows = y_coord.tolist()
         #generate a string denoting where all the empty fields are
         for x in range(0, len(columns)):
-            error_string += " Column: " + columns[x] + " Row: " + str(rows[x]) + "."
+            #the lambda function cannot store rows/columns with multiple missing values, so in this case the user is not told the specific 
+            #location of the missing value
+            try:
+                error_string += " Column: " + columns[x] + " Row: " + str(rows[x]) + "."
+            except IndexError:
+                error_string +=  " Some columns/rows contain multiple blank values."
         
         log_name = file_name.replace(".csv", "")
         #add error to log file
@@ -138,8 +131,8 @@ def check_ids(file_data, file_name):
     #gets all the batch ids from the data
     batch_ids = file_data['batch_id'].tolist()
     for id in batch_ids:
-        #checks validity of batchids - no duplicates, correct data type and not <=0
-        if type(id) == int and id > 0:
+        #checks validity of batchids - no duplicates, correct data type and not <0
+        if type(id) == int and id >= 0:
             if id in batch_id_set:
                 is_invalid = True
                 error = "Duplicate ID: " + str(id)
@@ -209,7 +202,7 @@ def check_readings(file_data, file_name):
                     # cast to float
                     file_data.at[x, file_data.columns[y+2]] = format(value, ".2f")
                     #save updated dataframe to file
-                    file_data.to_csv(".\\"+ file_name, index = False)
+                    file_data.to_csv(file_name, index = False)
                     log_name = file_name.replace(".csv", "")
                     #add error to log file
                     with open(log_name +"_log.txt", "a+") as log_file:
@@ -228,7 +221,7 @@ def check_readings(file_data, file_name):
             if len(decimal_places) > 3:
                 #round the value and save amended data to file
                 file_data.at[x, file_data.columns[y+2]] = round(value, 3)
-                file_data.to_csv(".\\"+ file_name, index = False)
+                file_data.to_csv(file_name, index = False)
                 log_name = file_name.replace(".csv", "")
                 #do not need to return invalid as error has been fixed
                 with open(log_name +"_log.txt", "a+") as log_file:
@@ -261,27 +254,38 @@ for file_name in files_to_check: # assume file name is in correct format and fil
     else:
         #get file data and perform validity checks on it
         file_data = pandas.read_csv(file_name)
-        is_invalid = verify_data(file_data, file_name)
+        with open(file_name) as file:
+            has_data = file.readline and file.readline
+        if has_data:
+            is_invalid = verify_data(file_data, file_name)
+        else:
+            log_name = file_name.replace(".csv", "")
+            #adds error to log file
+            with open(log_name +"_log.txt", "a+") as log_file:
+                log_file.write("Error 101 - Header Only\n")
+            is_invalid = True
     
     #get data from filename to use in directory system
-    year = file_name[9:13]
-    month = file_name[13:15]
-    day = file_name[15:17]
+    year = file_name[14:18]
+    month = file_name[18:20]
+    day = file_name[20:22]
     #create path name to save to based on validity of file
     if is_invalid:
-        desired_path = 'files/rejected/' + year + '/' + month + '/' + day + '/'
+        desired_path = 'files/rejected/' + year + '/' + month + '/' + day
     else:
-        desired_path = 'files/successful/' + year + '/' + month + '/' + day + '/'
+        desired_path = 'files/successful/' + year + '/' + month + '/' + day
         #create log denoting a valid file
         log_name = file_name.replace(".csv", "")
         with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("000 - Valid File\n")
 
     #if the correct location in the file system does not exist, create it
-    if not (os.path.exists(path)):
-       os.makedirs(path)
+    if not (os.path.exists(desired_path)):
+       os.makedirs(desired_path)
+
+    desired_path += '/'
 
     #move file and log to correct directory
-    shutil.move("temp/" + file_name, desired_path + file_name)
+    shutil.move(file_name, desired_path + file_name.replace("temp\\", ""))
     log_name = file_name.replace(".csv", "") + "_log.txt"
-    shutil.move("temp/" + log_name, desired_path + log_name)       
+    shutil.move(log_name, desired_path + log_name.replace("temp\\", ""))       

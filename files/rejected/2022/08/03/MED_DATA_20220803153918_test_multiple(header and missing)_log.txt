@@ -1,0 +1,3 @@
+Error 200 - Incorrect Header - Errors:['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
+ 'reading(replaced: 5 with 37)' 'reading6' 'reading7' 'reading8' 'reading9' 'reading10'] . Header was repaired.
+Error 300 - Missing Values -  Column: reading2 Row: 9.

@@ -1,0 +1,3 @@
+Error 200 - Incorrect Header - Errors:['ba(deleted: t)ch_id' 'timest(deleted: a)mp' 'reading1' 'reading2' 'reading3' 'reading4'
+ 'reading5' 'reading(replaced: 6 with 4.1)' 'reading7' 'reading8' 'reading9' 'reading10'] . Header was repaired.
+Error 803 - Value Out of Range - 12.0 Row: 6 Column: reading4

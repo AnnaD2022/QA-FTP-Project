@@ -1,0 +1,1 @@
+Error 300 - Missing Values -  Column: reading1 Row: 2. Column: reading4 Row: 4. Column: reading7 Row: 8. Column: reading9 Row: 9. Some columns/rows contain multiple blank values.

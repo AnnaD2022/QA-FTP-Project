@@ -1,0 +1,2 @@
+Error 201 -  Fatal Incorrect Header - Errors:['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
+ 'reading(deleted: 5' 'reading)6' 'reading7' 'reading8' 'reading9' 'reading10'] . Header cannot be repaired due to error: Length mismatch: Expected axis has 11 elements, new values have 12 elements

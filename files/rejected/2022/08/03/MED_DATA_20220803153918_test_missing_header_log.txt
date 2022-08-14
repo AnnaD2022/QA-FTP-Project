@@ -1,0 +1,3 @@
+Error 200 - Incorrect Header - Errors:['(replaced: batch_id with 17)' '(replaced: timestamp with 15:39:18)' '(deleted: reading)1(inserted: .574)' '(replaced: reading2 with 3.806)' '(replaced: reading with 5.096' '4.44' '5.00)3' '(replaced: reading with 0.096' '1.65)4'
+ '(deleted: reading5' 'reading)6(replaced: ' 'reading7' 'reading with .)8(replaced: ' 'reading with 6)9' '(replaced: reading10 with 2.699' '8.796)'] . Header was repaired.
+Error 400 - Incorrect Number of Rows - 9 rather than 10.
