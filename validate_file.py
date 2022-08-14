@@ -9,18 +9,7 @@ import numpy
 
 
 # Things to test:
-# TODO redo temp
-# TODO add test case with multiple errors e.g. header and something else
-# TODO add test case for completely missing data
-# TODO add test case for incorrect num rows (too high and too low)
 # TODO ask/check if each file msut have 10 rows
-# TODO test with more smaple data (bad)
-# TODO double check catches all null values
-# TODO - effective error handling to increase robustness of solution and use, by sanitising all user inputs to prevent malicious access or 
-# modification of data and/or code - where is this necessary
-# TODO can you have a missing header line? if so, code for this
-# TODO test case for "too many" header columns with data - does it crash when header is fixed?
-# TODO test case for too many values (but correct header)
 # TODO test timestamp checker - vslid and invalid
 # TODO make sure well commented
 # TODO check that the class_function_descriptors is correct
@@ -28,17 +17,32 @@ import numpy
 # TODO test all cases for incorrect readings
 # TODO check if 0 is a valid reading
 # TODO make sure all todos finished
+    # TODO ask if still want to change log to info/help file
+#TODO add test cases for all incorrect id types
+#TODO add test case for duplicate batch IDs
+#TODO assume bad filenames handled by server
+    # TODO check if having string batch id will crash program
+        #TODO check if id can be 0
+# TODO rename remove_empty - tell chat
+#TODO s for after header code is updated
+#TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
+#TODO check if missing column completely causes errors with blanks when header is corrected?
+# TODO test case for "too many" header columns with data - does it crash when header is fixed?
+# TODO test case for too many values (but correct header)
+# TODO test case for completely missing header line
 
 # perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
     #if flagged for deletion in one test, do not perform the rest
-    check_header(file_data, file_name)
-    if not (remove_empty(file_data, file_name)):
-        if not (check_num_rows(file_data, file_name)):
-            if not (check_num_columns(file_data, file_name)):
-                if not (check_ids(file_data, file_name)):
-                    if not (check_timestamp(file_data, file_name)):
-                        return check_readings(file_data, file_name)
+    if not (check_header(file_data, file_name)):
+        if not (remove_empty(file_data, file_name)):
+            if not (check_num_rows(file_data, file_name)):
+                if not (check_num_columns(file_data, file_name)):
+                    if not (check_ids(file_data, file_name)):
+                        if not (check_timestamp(file_data, file_name)):
+                            return check_readings(file_data, file_name)
+                    else:
+                        return True
                 else:
                     return True
             else:
@@ -68,20 +72,28 @@ def check_header(file_data, file_name):
             else:
                 diff_string = "unknown format error"
         
-        log_name = file_name.replace(".csv", "")
-        #add error to log file
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.\n")
+        # attempt to overwrite incorrect header with correct string
+        try:
+            file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
+            'reading5', 'reading6', 'reading7', 'reading8','reading9', 'reading10']
+            file_data.to_csv(".\\"+ file_name, index = False)
+            log_name = file_name.replace(".csv", "")
+            #add error to log file
+            with open(log_name +"_log.txt", "a+") as log_file:
+                log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.\n")
+            #return False as file has been repaired, so header is no longer invalid
+            return False
+        #if header cannot be repaired
+        except ValueError as ve:
+            #log error
+            with open(log_name +"_log.txt", "a+") as log_file:
+                log_file.write("Error 201 -  Fatal Incorrect Header - Errors:" + diff_string + " . Header cannot be repaired due to error: " + ve + "\n")
+            #return that file is invalud
+            return True
+    #return False as header is valid
+    return False
 
-        # overwrite incorrect header with correct string
-        file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
-        'reading5', 'reading6', 'reading7', 'reading8','reading9', 'reading10']
-        file_data.to_csv(".\\"+ file_name, index = False)
-        
-    # do not mark to delete as any errors would have been repaired
-    return
-
-def remove_empty(file_data, file_name): #TODO rename
+def remove_empty(file_data, file_name):
     # find "coordinates" of empty fields
     x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
     #if there are any empty fiends
@@ -98,12 +110,10 @@ def remove_empty(file_data, file_name): #TODO rename
         with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 300 - Missing Values - " + error_string + "\n")
         
-        #TODO check if should just remove
         return True
 
     return False
 
-#TODO check if need this
 def check_num_rows(file_data, file_name):
     if len(file_data.index) == 10:
         return False
@@ -114,15 +124,12 @@ def check_num_rows(file_data, file_name):
             log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.\n")
         return True
 
-#TODO add test cases for all incorrect id types
 def check_ids(file_data, file_name):
     batch_id_set = set()
     # by default do not flag for deletion
     is_invalid = False
     batch_ids = file_data['batch_id'].tolist()
     for id in batch_ids:
-    # TODO check if having string batch id will crash this
-    #TODO check if id can be 0
         if type(id) == int and id > 0:
             if id in batch_id_set:
                 is_invalid = True
@@ -261,8 +268,3 @@ for file_name in files_to_check: # assume file name is in correct format and fil
     shutil.move("temp/" + file_name, desired_path + file_name)
     log_name = file_name.replace(".csv", "") + "_log.txt"
     shutil.move("temp/" + log_name, desired_path + log_name)       
-
-    # TODO could do warnings per file or add file to list that is sent to gui at end, told to check logs for more info e.g. FILENAME has errors
-    # but has been repaired - check LOGNAME in archive for details.  FILENAME has errors and cannot be repaired - see LOGNAME in delete for 
-    # details
-    # TODO change log to info/help file
