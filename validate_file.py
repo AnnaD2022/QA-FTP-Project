@@ -10,9 +10,8 @@ import numpy
 
 # Things to test:
 # TODO ask/check if each file msut have 10 rows
-# TODO make sure well commented
 # TODO check that the class_function_descriptors is correct
-# TODO ask if need ending 0s
+# TODO ask if need ending 0s - readings under 3dp are valid but above 3dp are not
 # TODO test all cases for incorrect readings
 # TODO check if 0 is a valid reading
 # TODO make sure all todos finished
@@ -26,12 +25,14 @@ import numpy
 #check all pathways - if doesnt work just remove breaks and change to nested if that checks for is_invalid false, else break
 #TODO add test case for multiple incorrect timestamps - check break works as intended
 # TODO rename remove_empty - tell chat
-#TODO s for after header code is updated
+# TODO check if break works for check num colums - multiple rows w incorrect lens
 #TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
 #TODO check if missing column completely causes errors with blanks when header is corrected?
 # TODO test case for "too many" header columns with data - does it crash when header is fixed?
 # TODO test case for too many values (but correct header)
 # TODO test case for completely missing header line
+# TODO check other file asked to check
+# TODO before tests are run change non date file names to have a date at the beginning of them so that they can be sorted into correct place
 
 # perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
@@ -244,7 +245,7 @@ def check_readings(file_data, file_name):
                 with open(log_name +"_log.txt", "a+") as log_file:
                         log_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                 return True
-    #if all values pass all test, return that the file is not invalid
+    #if all values pass all tests, return that the file is not invalid
     return False
 
 
