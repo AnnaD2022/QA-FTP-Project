@@ -8,7 +8,7 @@ class HeaderUnitTest(unittest.TestCase):
       #Tests for the validate_file module
       def test_ch1(self):
           # should return without issue as its is testing a file with valid headings
-          self.assertIsNone(check_header(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
+          self.assertFalse(check_header(pd.read_csv('./tests/testDoc1Valid.csv'),"testDoc1Valid.csv"))
            # Passed 12/08/2022
      
       def test_ch2(self):
@@ -23,8 +23,10 @@ class HeaderUnitTest(unittest.TestCase):
           self.assertTrue(exists('testDoc2.1Invalid_log.txt'))
 
       def test_ch4(self):
+          #True should be returned in this instance
+          self.assertTrue(check_header(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv"))
+
            #checks log file is generated following identification of a deleted heading
-          check_header(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv")
           self.assertTrue(exists('testDoc3InvalidRC_log.txt'))         
       # Passed 12/08/2022
 

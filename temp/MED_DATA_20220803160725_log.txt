@@ -1,0 +1,1 @@
+Error 803 - Value Out of Range - -10.112 Row: 1 Column: reading4
