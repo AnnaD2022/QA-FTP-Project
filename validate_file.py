@@ -10,29 +10,24 @@ import numpy
 
 # Things to test:
 # TODO ask/check if each file msut have 10 rows
-# TODO check that the class_function_descriptors is correct
-# TODO ask if need ending 0s - readings under 3dp are valid but above 3dp are not
-# TODO test all cases for incorrect readings
+# TODO ask if readings need ending 0s - readings under 3dp are valid but above 3dp are not
 # TODO check if 0 is a valid reading
-# TODO make sure all todos finished
-    # TODO ask if still want to change log to info/help file
-#TODO add test cases for all incorrect id types
-#TODO add test case for duplicate batch IDs
-#TODO assume bad filenames handled by server
-    # TODO check if having string batch id will crash program
-        #TODO check if id can be 0
-#TODO check what happens if multiple incorrect batch ids - not sure if break in duplicate section will work, or in any of those sections for that matter, 
-#check all pathways - if doesnt work just remove breaks and change to nested if that checks for is_invalid false, else break
-#TODO add test case for multiple incorrect timestamps - check break works as intended
+# TODO ask if still want to change log to info/help file
+# TODO assume bad filenames handled by server
+# TODO check if id can be 0
+# TODO check what happens if multiple incorrect batch ids - not sure if break in duplicate section will work, or in any of those sections for that matter, 
+#check all pathways - if doesnt work just remove breaks and change to nested if that checks for is_invalid false, else break or change to returns?
+# TODO add test case for multiple incorrect timestamps - check break works as intended
 # TODO rename remove_empty - tell chat
-# TODO check if break works for check num colums - multiple rows w incorrect lens
-#TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
-#TODO check if missing column completely causes errors with blanks when header is corrected?
+# TODO check if break works for check num columns - multiple rows w incorrect lens
+# TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
+# TODO check if missing column completely causes errors with blanks when header is corrected?
 # TODO test case for "too many" header columns with data - does it crash when header is fixed?
-# TODO test case for too many values (but correct header)
 # TODO test case for completely missing header line
 # TODO check other file asked to check
 # TODO before tests are run change non date file names to have a date at the beginning of them so that they can be sorted into correct place
+# TODO change path files are fetched from
+# TODO message chat about assumptions
 
 # perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
