@@ -10,7 +10,6 @@ import numpy
 
 # Things to test:
 # TODO ask/check if each file msut have 10 rows
-# TODO test timestamp checker - vslid and invalid
 # TODO make sure well commented
 # TODO check that the class_function_descriptors is correct
 # TODO ask if need ending 0s
@@ -23,6 +22,9 @@ import numpy
 #TODO assume bad filenames handled by server
     # TODO check if having string batch id will crash program
         #TODO check if id can be 0
+#TODO check what happens if multiple incorrect batch ids - not sure if break in duplicate section will work, or in any of those sections for that matter, 
+#check all pathways - if doesnt work just remove breaks and change to nested if that checks for is_invalid false, else break
+#TODO add test case for multiple incorrect timestamps - check break works as intended
 # TODO rename remove_empty - tell chat
 #TODO s for after header code is updated
 #TODO check if issue where even blank extra header line causes crash removes need for check_num columns, if not, add test case for too many/few columns
@@ -51,6 +53,7 @@ def verify_data(file_data, file_name):
             return True
     else:
         return True
+
 
 def check_header(file_data, file_name):
     correct_header = """['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
@@ -93,10 +96,11 @@ def check_header(file_data, file_name):
     #return False as header is valid
     return False
 
+
 def remove_empty(file_data, file_name):
     # find "coordinates" of empty fields
     x_coord, y_coord = ((file_data.isnull().sum(x)| file_data.eq('').sum(x)).loc[lambda x: x.gt(0)].index for x in(0,1))
-    #if there are any empty fiends
+    #if there are any empty fields
     if y_coord.size > 0:
         error_string = ""
         columns = x_coord.tolist()
@@ -110,13 +114,18 @@ def remove_empty(file_data, file_name):
         with open(log_name +"_log.txt", "a+") as log_file:
             log_file.write("Error 300 - Missing Values - " + error_string + "\n")
         
+        #return that file is invalid
         return True
 
+    #if there are no empty fields, return that file has passed this test (is not invalid)
     return False
 
+
 def check_num_rows(file_data, file_name):
+    #if there are 10 rows, file is valid
     if len(file_data.index) == 10:
         return False
+    # otherwise, file is invalid
     else:
         log_name = file_name.replace(".csv", "")
         #add error to log file
@@ -124,19 +133,23 @@ def check_num_rows(file_data, file_name):
             log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.\n")
         return True
 
+
 def check_ids(file_data, file_name):
+    #stores all of the batch ids that have already been read so that duplicates can be found
     batch_id_set = set()
     # by default do not flag for deletion
     is_invalid = False
+    #gets all the batch ids from the data
     batch_ids = file_data['batch_id'].tolist()
     for id in batch_ids:
+        #checks validity of batchids - no duplicates, correct data type and not <=0
         if type(id) == int and id > 0:
             if id in batch_id_set:
                 is_invalid = True
                 error = "Duplicate ID: " + str(id)
-                break
+                break #if one id is invalid, do not check the rest
             else:
-                batch_id_set.add(id)
+                batch_id_set.add(id) #add each correct id to the set so that it duplicates can be found
         elif type(id) != int:
             is_invalid = True
             error = "Invalid data type: " + str(type(id))
@@ -146,6 +159,7 @@ def check_ids(file_data, file_name):
             error = "Negative ID: " + str(id)
             break
 
+    #if there is an invalid batch id, add error to file
     if is_invalid:
         log_name = file_name.replace(".csv", "")
         with open(log_name +"_log.txt", "a+") as log_file:
@@ -153,8 +167,10 @@ def check_ids(file_data, file_name):
 
     return is_invalid
 
+
 def check_num_columns(file_data, file_name):
     is_invalid = False
+    #check number of columns in each row of the file.  If there are too many, report location of error and flag file as invalid
     for x in range(10):
         row = file_data.iloc[x]
         if len(row) != 12:
@@ -169,9 +185,12 @@ def check_num_columns(file_data, file_name):
 
 def check_timestamp(file_data, file_name):
     is_invalid = False
+    #for each row in file
     for x in range(10):
+        #get the timestamp from that row and check it matches regex for hh:mm:ss 24hr clock
         time = file_data['timestamp'].values[x]
         pattern = re.compile("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$")
+        #if it does not match the regex, report the error, flag as invalid, and do not continue checking
         if pattern.fullmatch(time) is None:
             error = "Error 700 - Incorrect Timestamp - \"" + time + "\" on line " + str(x + 1) + "\n"
             log_name = file_name.replace(".csv", "")
@@ -180,6 +199,7 @@ def check_timestamp(file_data, file_name):
             is_invalid = True
             break
     return is_invalid
+
 
 def check_readings(file_data, file_name):
     #for each reading in each row
@@ -226,6 +246,7 @@ def check_readings(file_data, file_name):
                 return True
     #if all values pass all test, return that the file is not invalid
     return False
+
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
