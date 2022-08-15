@@ -12,19 +12,23 @@ class HeaderUnitTest(unittest.TestCase):
            # Passed 12/08/2022
      
       def test_ch2(self):
+          # check the correct value is returned
+          self.assertFalse(check_header(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv"))
+
           # checks log file is generated following incorrect heading inclusion
-          check_header(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv")
           self.assertTrue(exists('testDoc2invalid_log.txt'))
           # Passed 12/08/2022
 
       def test_ch3(self):
+          #check true is returned
+          self.assertTrue(check_header(pd.read_csv('./tests/testDoc2.1Invalid.csv'),"testDoc2.1Invalid.csv"))
+
           #checks log file is generated following identification of an additional heading
-          check_header(pd.read_csv('./tests/testDoc2.1Invalid.csv'),"testDoc2.1Invalid.csv")
           self.assertTrue(exists('testDoc2.1Invalid_log.txt'))
 
       def test_ch4(self):
-          #True should be returned in this instance
-          self.assertTrue(check_header(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv"))
+          #False should be returned in this instance
+          self.assertFalse(check_header(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv"))
 
            #checks log file is generated following identification of a deleted heading
           self.assertTrue(exists('testDoc3InvalidRC_log.txt'))         
