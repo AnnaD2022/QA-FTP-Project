@@ -8,24 +8,15 @@ import shutil
 import numpy
 
 
-# TODO ask if still want to change log to info/help file
-# TODO rename remove_empty - tell chat and update documentation
-# TODO fixing header issue has removed the need for check num columns - tell chat + delete and update documentation
-# TODO change path files are fetched from
-# TODO if values under 3.dp are allowed, then remove checking for int as doesnt matter? - ask and update documentation
-
 # perform checks to test correctness of file - returns True if file is invalid and False if file is valid
 def verify_data(file_data, file_name):
     #if flagged for deletion in one test, do not perform the rest
     if not (check_header(file_data, file_name)):
         if not (remove_empty(file_data, file_name)):
             if not (check_num_rows(file_data, file_name)):
-                if not (check_num_columns(file_data, file_name)):
-                    if not (check_ids(file_data, file_name)):
-                        if not (check_timestamp(file_data, file_name)):
-                            return check_readings(file_data, file_name)
-                        else:
-                            return True
+                if not (check_ids(file_data, file_name)):
+                    if not (check_timestamp(file_data, file_name)):
+                        return check_readings(file_data, file_name)
                     else:
                         return True
                 else:
@@ -63,18 +54,18 @@ def check_header(file_data, file_name):
             file_data.columns = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4',
             'reading5', 'reading6', 'reading7', 'reading8','reading9', 'reading10']
             file_data.to_csv(file_name, index = False)
-            log_name = file_name.replace(".csv", "")
-            #add error to log file
-            with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.\n")
+            info_name = file_name.replace(".csv", "")
+            #add error to info file
+            with open(info_name +"_info.txt", "a+") as info_file:
+                info_file.write("Error 200 - Incorrect Header - Errors:" + diff_string + " . Header was repaired.\n")
             #return False as file has been repaired, so header is no longer invalid
             return False
         #if header cannot be repaired
         except ValueError as ve:
-            #log error
-            log_name = file_name.replace(".csv", "")
-            with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write("Error 201 -  Fatal Incorrect Header - Errors:" + diff_string + " . Header cannot be repaired due to error: " + str(ve) + "\n")
+            #record error
+            info_name = file_name.replace(".csv", "")
+            with open(info_name +"_info.txt", "a+") as info_file:
+                info_file.write("Error 201 -  Fatal Incorrect Header - Errors:" + diff_string + " . Header cannot be repaired due to error: " + str(ve) + "\n")
             #return that file is invalud
             return True
     #return False as header is valid
@@ -98,10 +89,10 @@ def remove_empty(file_data, file_name):
             except IndexError:
                 error_string +=  " Some columns/rows contain multiple blank values."
         
-        log_name = file_name.replace(".csv", "")
-        #add error to log file
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 300 - Missing Values - " + error_string + "\n")
+        info_name = file_name.replace(".csv", "")
+        #add error to info file
+        with open(info_name +"_info.txt", "a+") as info_file:
+            info_file.write("Error 300 - Missing Values - " + error_string + "\n")
         
         #return that file is invalid
         return True
@@ -109,17 +100,18 @@ def remove_empty(file_data, file_name):
     #if there are no empty fields, return that file has passed this test (is not invalid)
     return False
 
-
+#this function assumes that there are 10 rows in each file, as that is the case for all of the test files provided.  If the actual requirements
+#are different, this can easily be altered or removed
 def check_num_rows(file_data, file_name):
     #if there are 10 rows, file is valid
     if len(file_data.index) == 10:
         return False
     # otherwise, file is invalid
     else:
-        log_name = file_name.replace(".csv", "")
-        #add error to log file
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.\n")
+        info_name = file_name.replace(".csv", "")
+        #add error to info file
+        with open(info_name +"_info.txt", "a+") as info_file:
+            info_file.write("Error 400 - Incorrect Number of Rows - " + str(len(file_data.index)) + " rather than 10.\n")
         return True
 
 
@@ -150,26 +142,28 @@ def check_ids(file_data, file_name):
 
     #if there is an invalid batch id, add error to file
     if is_invalid:
-        log_name = file_name.replace(".csv", "")
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 500 - Invalid Batch ID - " + error + "\n")
+        info_name = file_name.replace(".csv", "")
+        with open(info_name +"_info.txt", "a+") as info_file:
+            info_file.write("Error 500 - Invalid Batch ID - " + error + "\n")
 
     return is_invalid
 
 
-def check_num_columns(file_data, file_name):
-    is_invalid = False
+#this function was used to check the number of colums of data in the file was correct.  However, changes to the check_header function has made
+#this redundant, so it has been removed
+#def check_num_columns(file_data, file_name):
+    #is_invalid = False
     #check number of columns in each row of the file.  If there are too many, report location of error and flag file as invalid
-    for x in range(10):
-        row = file_data.iloc[x]
-        if len(row) != 12:
-            error = "Error 600 - Too Many Values - " + str(len(row)) + " columns instead of 10 on line " + str(x + 1) + "\n"
-            log_name = file_name.replace(".csv", "")
-            with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write(error)
-            is_invalid = True
-            break
-    return is_invalid
+    #for x in range(10):
+        #row = file_data.iloc[x]
+        #if len(row) != 12:
+            #error = "Error 600 - Too Many Values - " + str(len(row)) + " columns instead of 10 on line " + str(x + 1) + "\n"
+            #log_name = file_name.replace(".csv", "")
+            #with open(log_name +"_log.txt", "a+") as log_file:
+                #log_file.write(error)
+            #is_invalid = True
+            #break
+    #return is_invalid
 
 
 def check_timestamp(file_data, file_name):
@@ -182,9 +176,9 @@ def check_timestamp(file_data, file_name):
         #if it does not match the regex, report the error, flag as invalid, and do not continue checking
         if pattern.fullmatch(time) is None:
             error = "Error 700 - Incorrect Timestamp - \"" + time + "\" on line " + str(x + 1) + "\n"
-            log_name = file_name.replace(".csv", "")
-            with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write(error)
+            info_name = file_name.replace(".csv", "")
+            with open(info_name +"_info.txt", "a+") as info_file:
+                info_file.write(error)
             is_invalid = True
             break
     return is_invalid
@@ -203,16 +197,16 @@ def check_readings(file_data, file_name):
                     file_data.at[x, file_data.columns[y+2]] = format(value, ".2f")
                     #save updated dataframe to file
                     file_data.to_csv(file_name, index = False)
-                    log_name = file_name.replace(".csv", "")
-                    #add error to log file
-                    with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 800 - Int, Not Float - Row: " + str(x+1) + " Column: " +  + " . Cast as float.\n")
+                    info_name = file_name.replace(".csv", "")
+                    #add error to info file
+                    with open(info_name +"_info.txt", "a+") as info_file:
+                        info_file.write("Error 800 - Int, Not Float - Row: " + str(x+1) + " Column: " +  + " . Cast as float.\n")
                 else:
-                    #cannot fix error, so log and return that the tests failed
-                    log_name = file_name.replace(".csv", "")
-                    #add error to log file
-                    with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
+                    #cannot fix error, so record and return that the tests failed
+                    info_name = file_name.replace(".csv", "")
+                    #add error to info file
+                    with open(info_name +"_info.txt", "a+") as info_file:
+                        info_file.write("Error 801 - Incorrect Data Type - " + str(type(value)) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                     return True
 
             #get all numbers after decimal point
@@ -222,16 +216,16 @@ def check_readings(file_data, file_name):
                 #round the value and save amended data to file
                 file_data.at[x, file_data.columns[y+2]] = round(value, 3)
                 file_data.to_csv(file_name, index = False)
-                log_name = file_name.replace(".csv", "")
+                info_name = file_name.replace(".csv", "")
                 #do not need to return invalid as error has been fixed
-                with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 802 - Incorrect Rounding - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + ". Fixed rounding.\n")
+                with open(info_name +"_info.txt", "a+") as info_file:
+                        info_file.write("Error 802 - Incorrect Rounding - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + ". Fixed rounding.\n")
 
             #check values are in range
             if not (0 < value < 10):
-                log_name = file_name.replace(".csv", "")
-                with open(log_name +"_log.txt", "a+") as log_file:
-                        log_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
+                info_name = file_name.replace(".csv", "")
+                with open(info_name +"_info.txt", "a+") as info_file:
+                        info_file.write("Error 803 - Value Out of Range - " + str(value) + " Row: " + str(x+1) + " Column: " + file_data.columns[y+2] + "\n")
                 return True
     #if all values pass all tests, return that the file is not invalid
     return False
@@ -239,17 +233,17 @@ def check_readings(file_data, file_name):
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
-path = 'temp'# TODO change path to "to check" when all testing  done
+path = 'files/to_check'
 files_to_check =  glob.glob(path + '/*.csv')
 for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
     is_invalid = False
     #if file is empty
     if os.stat(file_name).st_size == 0:
-        #removes data from file name to create log name
-        log_name = file_name.replace(".csv", "")
-        #adds error to log file
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("Error 100 - Empty File\n")
+        #removes data from file name to create info file name
+        info_name = file_name.replace(".csv", "")
+        #adds error to info file
+        with open(info_name +"_info.txt", "a+") as info_file:
+            info_file.write("Error 100 - Empty File\n")
         is_invalid = True
     else:
         #get file data and perform validity checks on it
@@ -259,25 +253,25 @@ for file_name in files_to_check: # assume file name is in correct format and fil
         if has_data:
             is_invalid = verify_data(file_data, file_name)
         else:
-            log_name = file_name.replace(".csv", "")
-            #adds error to log file
-            with open(log_name +"_log.txt", "a+") as log_file:
-                log_file.write("Error 101 - Header Only\n")
+            info_name = file_name.replace(".csv", "")
+            #adds error to info file
+            with open(info_name +"_info.txt", "a+") as info_file:
+                info_file.write("Error 101 - Header Only\n")
             is_invalid = True
     
     #get data from filename to use in directory system
-    year = file_name[14:18]
-    month = file_name[18:20]
-    day = file_name[20:22]
+    year = file_name[24:28]
+    month = file_name[28:30]
+    day = file_name[30:32]
     #create path name to save to based on validity of file
     if is_invalid:
         desired_path = 'files/rejected/' + year + '/' + month + '/' + day
     else:
         desired_path = 'files/successful/' + year + '/' + month + '/' + day
-        #create log denoting a valid file
-        log_name = file_name.replace(".csv", "")
-        with open(log_name +"_log.txt", "a+") as log_file:
-            log_file.write("000 - Valid File\n")
+        #create info file denoting a valid file
+        info_name = file_name.replace(".csv", "")
+        with open(info_name +"_info.txt", "a+") as info_file:
+            info_file.write("000 - Valid File\n")
 
     #if the correct location in the file system does not exist, create it
     if not (os.path.exists(desired_path)):
@@ -285,7 +279,7 @@ for file_name in files_to_check: # assume file name is in correct format and fil
 
     desired_path += '/'
 
-    #move file and log to correct directory
-    shutil.move(file_name, desired_path + file_name.replace("temp\\", ""))
-    log_name = file_name.replace(".csv", "") + "_log.txt"
-    shutil.move(log_name, desired_path + log_name.replace("temp\\", ""))       
+    #move file and info file to correct directory
+    shutil.move(file_name, desired_path + file_name.replace("files/to_check\\", ""))
+    info_name = file_name.replace(".csv", "") + "_info.txt"
+    shutil.move(info_name, desired_path + info_name.replace("files/to_check\\", ""))       
