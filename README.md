@@ -10,7 +10,7 @@ Repo to store project files for task set by QA regarding download + verification
 
 ## ERROR CODES
 
-The system produces error codes denoting problems with invalid files, which are stored in their respective log files:
+The system produces error codes denoting problems with invalid files, which are stored in their respective info files:
 - 000 - Valid File (Logged without preceding "Error")
 - 100 - Empty File
 - 101 - Header Only
@@ -19,7 +19,7 @@ The system produces error codes denoting problems with invalid files, which are 
 - 300 - Missing Values
 - 400 - Incorrect Number of Rows
 - 500 - Invalid Batch ID
-- 600 - Too Many Values
+- 600 - Too Many Values (deprecated)
 - 700 - Incorrect Timestamp
 - 800 - Int, Not Float
 - 801 - Incorrect Data Type
