@@ -53,10 +53,8 @@
 - is_invalid is returned to verify_data
 
 #### Check_num_columns (removed):
--	Gets the number of columns in each row of the file, if there are not 12 columns then an info.txt file is created for this invalid file detailing the fact the number of columns is wrong, and is_invalid is set to True (it is instantiated as False)
--   If one row has an invalid number of columns, the other rows are not checked
--   is_invalid is returned to verify_data
--   This function has now been removed as it was made redundant by check_header
+[Check_num_columns details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_num_columns_check_details.md) <br>
+The above linked document explains why this function was removed, describes the function and includes the test plan and a link for to the unit test of this function which was passing before function removal
 
 #### Check_timestamp:
 -	Goes through all values in the ‘timestamp’ column and checks if each listed timestamp matches the regex for the pre-defined format, if not an error message is generated and stored in an info.txt file for this invalid file.  is_invalid is set to True (it is instantiated as False)

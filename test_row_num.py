@@ -12,10 +12,13 @@ class RowNumUnitTest(unittest.TestCase):
           #Passes 12/08/2022
 
       def test_cnr2(self):
+          #True should be returned as this file would be invalid
+          self.assertTrue(check_num_rows(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv"))
+
           # A log file containing error messages, etc should be produced as test file passed in has fewer rows then required.
-          check_num_rows(pd.read_csv('./tests/testDoc3InvalidRC.csv'),"testDoc3InvalidRC.csv")
-          self.assertTrue(exists('testDoc3InvalidRC_log.txt'))
+          self.assertTrue(exists('testDoc3InvalidRC_info.txt'))
           # Passed 12/08/2022
+          #Passes 16/08/2022 -> check of return value logic added, name of returned file to check against has also been modified to reflect change in main code from a '_log.txt' extension to '_text.info'
 
 if __name__ == '__main__':
    unittest.main()

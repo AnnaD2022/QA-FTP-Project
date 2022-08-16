@@ -12,10 +12,13 @@ class EmptyUnitTest(unittest.TestCase):
           #Passes 12/08/2022  
 
       def test_re2(self):
+          #True should be returned as the file is invalid
+          self.assertTrue(remove_empty(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv"))
+
           # should produce a log file, etc as file being tested has missing values
-          remove_empty(pd.read_csv('./tests/testDoc2invalid.csv'),"testDoc2invalid.csv")
-          self.assertTrue(exists('testDoc2invalid_log.txt'))  
+          self.assertTrue(exists('testDoc2invalid_info.txt'))  
           #Passes 12/08/2022   
+          # Passes 16/08/2022 -> return value check logic added and name of returned file updated to reflect change in main code from '_log.txt' to '_info.txt'
 
 if __name__ == '__main__':
    unittest.main()
