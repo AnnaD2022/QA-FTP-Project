@@ -8,6 +8,11 @@
 |Anon Thomas|TorinM321 |
 
 ## Team Management
+#### Team Leadership
+- TODO anna
+- democratised system
+<br>
+
 #### Work division
 Work was divided evenly between all members of the team based on strengths and prior experience. The fact that some team members were together in person at the time of project commencement and some were not also impacted work division. In person team members worked together to produce the main code components, and those who were virtual adopted the equivalant of a Quality Assurance role, carrying out tests on the code and suggesting improvements with an objective eye as they had not been involved in its production. <br> Documentation such as this report and any linked documents was a team effort, completed by the team members most familiar with a certain section and peer assessed by other team members to ensure quality, clarity and detail were maintained. <br><br>
 |Teams name| Contributions |
@@ -16,12 +21,6 @@ Work was divided evenly between all members of the team based on strengths and p
 |Jacob S1| [server.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/server.py) <br> [client.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/client.py) <br> [README.md](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/README.md) <br> Documentation|
 |Anna D|[validate_file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py)<br> [README.md](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/README.md) <br> [class_function_descriptors](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/class_function_descriptors.md) <br> File archive <br> Documentation|
 |Anon Thomas|[main.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py) <br> documentation |
-
-
-#### Use of version control
-- TODO emily
-- why we chose it - everyone knows how to use it, easy to use, auto resolve conflicts, more streamlined, can rollback versions if needed 
-
 <br>
 
 #### Meeting organisation
@@ -29,8 +28,26 @@ Team meetings were arranged using our group teams chat. These meetings either to
 
 <br>
 
+#### Time Management
+- TODO anna
+- Personal projects, time crunch, made it harder
+- Unforseen challenges
+
+<br>
+
+#### Cooperation
+- TODO anna + others add to
+- reached out, keep in loop, etc 
+<br>
+
+## Code production approach
 #### Choice of programming language
 As a team we decided to complete the entire project in python, as all team members have previous experience with the language, and thus felt more confident using it than C or PowerShell.  Additionally, file handling, data processing and data manipulation, which are all integral parts of the task are, in our opinion, much simpler in python than the other languages permitted.
+
+<br>
+
+#### Use of version control
+As a team we decided to use GitHub to facilitate version control throughout the completion of the project. This was in part due to the fact all members of the team had prior experience using GitHub or GitLab and thus were familiar with the processes involved in interacting with a repository and that it acts as a secure, private host for our code; but mostly as a result the many features GitHub offers. <br> Auto-resolution of conflicts when multiple members of the team had collaborated on the same area of code helped us to increase the efficiency with which we produced working features. The ability to quickly and easily share what we were working on with one another using the simple commit, push and pull commands aided in our collaborative process as we could keep up to date with what others were doing and shape our code to best suit that thus also ensuring our code remained cohesive and clear. <br>The chronological order with which commits are registered and stored in the GitHub repository as well as team members descriptive commit messages, to give a few examples: [commit 2fd179f](https://github.com/AnnaD2022/QA-FTP-Project/commit/2fd179f7669cca71af4ab3c5e40095f17f2a4a49) which indicates updates to the GUI in main.py and [commit 42ced5a](https://github.com/AnnaD2022/QA-FTP-Project/commit/42ced5a7eb47619c91a855b85c1516cec1e4390c) which indicates the checkDate test is now complete and passing; also enabled us to refer or return to prior versions as needed and understand exactly what changes had been made when updated versions of the code no longer functioned as expected to facilitate a faster issue resolution process.<br> Overal, adoption of a GitHub repository has facilitated our efficient production of a quality product that meets outlined project requirements.
 
 <br>
 
@@ -42,28 +59,16 @@ Pair programming was not used significantly during initial development as a resu
 
 <br>
 
+## Problem solving
+- TODO emily
+<br>
+
 #### Bug fixing
 In regards to bugs, obscure errors such as value errors were predominantly discovered during the testing portion of development. When a bug was discovered, a note was made in the code and the test plan for any corresponding test that consequently failed, detailing why the failure occured. We then used our group teams chat to collaboratively discuss possible solutions as well as how any subsequent changes would impact other aspects of the code and how changes could be implemented whilst maintaining the integrity of other developers work.<br><br>
 Code that needed to be changed was then commented out in the relevant function with a note indicating why and the new code implemented around it. <br><br>
 We chose to leave prior code in, albeit commented out, as we felt it demonstrated our refinement processes and would help newcomers to the code to understand any deviations from the initial plans for the function logic and other altered plans.
 
 <br>
-
-#### Problem solving
-- TODO emily
-
-#### Cooperation
-- TODO anna + others add to
-- reached out, keep in loop, etc 
-
-#### Time Management
-- TODO anna
-- Personal projects, time crunch, made it harder
-- Unforseen challenges
-
-#### Team Leadership
-- TODO anna
-- democratised system
 
 ## Code
 ### Classes
@@ -88,4 +93,4 @@ We chose to leave prior code in, albeit commented out, as we felt it demonstrate
 
 ## Test Plans
 **Please note that the unit tests are linked within the test plan document, they and any csv files used can also be found in the tests folder on the following page: [main project repo](https://github.com/AnnaD2022/QA-FTP-Project)** <br>
-[Test plan document:](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_plans.md)
+[Test plan document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_plans.md)
