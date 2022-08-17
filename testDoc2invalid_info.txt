@@ -1,2 +1,0 @@
-Error 200 - Incorrect Header - Errors:['batch_id' 'timestamp' '(inserted: w)r(replaced: eadi with o)ng1' 'reading2' 'reading3' 'reading4'
- 'reading5' 'reading6' '(inserted: w)r(replaced: eadi with o)ng7' 'reading8' 'reading9' 'reading10'] . Header was repaired.
