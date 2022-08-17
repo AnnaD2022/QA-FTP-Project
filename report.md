@@ -2,7 +2,7 @@
 ## Team Members:
 |Teams name| Git Hub credentials |
 |----------|---------------------|
-|Emily SJ|EthSpJo|
+|Emily SJ|EthSpJo |
 |Jacob S1| facade93coat|
 |Anna D|AnnaD2022 |
 |Anon Thomas|TorinM321 |
