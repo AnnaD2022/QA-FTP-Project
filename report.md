@@ -18,6 +18,7 @@ Work was divided evenly between all members of the team based on strengths and p
 |Anon Thomas|[main.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py) <br> documentation |
 
 #### Use of version control
+- TODO why we chose it - everyone knows how to use it, easy to use, auto resolve conflicts, more streamlined, can rollback versions if needed
 
 #### Meeting organisation
 Team meetings were arranged using our group teams chat. These meetings either took the form of all team members being present in the team chat at a dedicated time discussing, in text form, varying aspects of the project; teams calls or, as seen in weeks 1 and 2 of the project, team members getting together in person to examine the current state of the repository and discuss next steps.
@@ -32,20 +33,46 @@ Linking to this, we adopted informal sprints. Due to the time restrictions on th
 Paired coding was minorly used by our team as a result of our feature driven approach, however, was enlisted during the testing / review stage when either in pairs or as an entire team we worked together to resolve identified bugs and objectively change working implementations of sections of the code to make them more efficient, etc.
 
 #### Bug fixing
-In regards to bugs, obscure erors euch as value errors, were predominantley discovered during the testing portion of the project. When a bug was discovered, a note was made in the code as well as in the test plan for any corresponding test that consequently failed detailing why the failure occured. We then used our group teams chat to collaboratively discuss possible solutions as well as how any subsequent changes would impact other aspects of the code and how that could be done to maintain the integrity of other developers work.<br>
+In regards to bugs, obscure errors euch as value errors, were predominantly discovered during the testing portion of the project. When a bug was discovered, a note was made in the code as well as in the test plan for any corresponding test that consequently failed detailing why the failure occured. We then used our group teams chat to collaboratively discuss possible solutions as well as how any subsequent changes would impact other aspects of the code and how that could be done to maintain the integrity of other developers work.<br>
 Code that needed to be changed was then commented out in the relevant function with a note indicating why and the new code implemented around it. <br>
 We chose to leave the prior code in but commented out as we felt it demonstrates our improvement processes and would help newcomers to the code to understand any deviations in the intial plans for function logic, etc.
 
-## Classes
+#### Problem solving
+- TODO emily
+
+#### Cooperation
+- TODO anna + others add to
+- reached out, keep in loop, etc 
+
+#### Time Management
+- TODO anna
+- Personal projects, time crunch, made it harder
+- Unforseen challenges
+
+#### Team Leadership
+- TODO anna
+- democratised system
+
+## Code
+### Classes
 [client.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/client.py) <br>
 [server.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/server.py) <br>
 [main.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py) <br>
 [validate_file.py](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/validate_file.py) <br>
 
 
-## Class function Descriptors
-[Class function descriptors document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/class_function_descriptors.md) 
+### Class function Descriptors
+[Class function descriptors document:](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/class_function_descriptors.md) 
+- TODO - fill these out
 
+### Assumptions
+- TODO anna
+
+### Error Code System
+- TODO anna
+
+### README
+[README document:]()
 ## Test Plans
 **Please note that the unit tests are linked within the test plan document, they and any csv files used can also be found in the tests folder on the following page: [main project repo](https://github.com/AnnaD2022/QA-FTP-Project)** <br>
 [Test plan document:](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_plans.md)
