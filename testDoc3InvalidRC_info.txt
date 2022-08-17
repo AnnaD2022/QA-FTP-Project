@@ -1,0 +1,2 @@
+Error 200 - Incorrect Header - Errors:['batch_id' 'timestamp' 'reading1' 'reading2' 'reading3' 'reading4'
+ 'reading5' 'reading(deleted: 6' 'reading)7' 'reading8' 'reading9' 'reading10'(inserted:  'Unnamed: 11')] . Header was repaired.

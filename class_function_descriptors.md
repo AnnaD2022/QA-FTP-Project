@@ -1,9 +1,8 @@
 # Class function descriptors
 ## Main.py
-#### checkDate:
--	Iterating through all of the files which have been stored in the designated files folder in our repo
--	If the file has type '.csv', then it replaces the file name with “Med_DATA_”
--	Year, month and day are abstracted from the filename, formatted as a date by inserting '/',  the date and file name are then added to the respective arrays
+#### checkDate: (removed)
+[CheckDate details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_checkDate_function_details.md) <br>
+The above linked document explains why this function was removed, the function itself and includes the test plan and a link for to the unit test of this function which was passing before function removal
 
 #### dateLogic: 
 -	Date.today is used to get todays date, the components of ‘todays’ date are then stored in arr1
