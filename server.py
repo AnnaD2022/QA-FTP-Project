@@ -14,7 +14,7 @@ def main(user, password):
     authorizer = authorizers.DummyAuthorizer()
 
     ##Create a basic user with permissions to list files/folders and read/download them. Folder shown is ./files
-    authorizer.add_user(user, password, './files', perm='lr')
+    authorizer.add_user(user, password, './server_files', perm='lr')
 
     ##Initialises Handler, allows client to run FTP commands
     handler = FTPHandler
