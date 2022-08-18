@@ -1,6 +1,7 @@
 import client
 
 from tkinter import *
+from tkinter import messagebox
 from tkcalendar import Calendar
 from datetime import *
 from ctypes import windll
@@ -23,8 +24,9 @@ def date_logic():
 
     ##If not valid date, show error messagebox
     if not is_valid_date:
-        messagebox.showerror("Error", "You cannot select a date later than today!")
-        return
+       messagebox.showerror("Error", "You cannot select a date later than today!")
+
+       return
     ##Else update date on GUI to show selected, call into ftp client with required date
     else:
         dates.config(text="Current date selected: " + cal.get_date())
