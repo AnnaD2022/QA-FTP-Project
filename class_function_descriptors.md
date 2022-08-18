@@ -11,8 +11,8 @@ The above linked document explains why this function was removed, the function i
 -	If the date is invalid, an error message gets shown in a popup box, where current date is configured to be that from the calendar
 -	client.download_files is called with parameters of the date requested by the user. This returns the number of files successfully downloaded
 -	Displays to the user how many files were downloaded if the number downloaded is greater than 0
--	Calls validate_file.main() to check, validate, and sort all the downloaded files. This returns an array of the paths on disk the files have been written to
--	Iterates through the array of file paths, showing the user the names of each file and the error codes and messages associated with each file. Dynamically selects the amount of characters per line to show in order to improve readability for the user, and improve the general look of the program
+-	Calls validate_file.main() to check, validate, and sort all the downloaded files. This returns a list of the paths on disk the files have been written to
+-	Iterates through the list of file paths, showing the user the names of each file and the error codes and messages associated with each file. Dynamically selects the amount of characters per line to show in order to improve readability for the user, and improve the general look of the program
 -	If no files are downloaded, or an error is encountered in the process, display this to the user
 
 #### ‘\_\_main__’: 
@@ -66,7 +66,7 @@ The above linked document explains why this function was removed, describes the 
 -   If one timestamp is incorrect, the rest are not checked
 -   is_invalid is returned to verify data
 
-### check_readings:
+#### check_readings:
 -   For each reading in each row, the following tests are performed:
 -   If the reading is not a float, it is checked it see if it is an int.  If it is, it is cast as a float, and the updated value is saved to the csv file.  An info.txt file is still created reporting the error, but the file is not marked as invalid.
 -   If the reading is not a float or an int, the error cannot be fixed, so the file is marked as invalid and the error is reported in the file's info.txt file.
@@ -86,6 +86,13 @@ The above linked document explains why this function was removed, describes the 
 -   Returns a list of all .csv file paths written to
 
 
-## Client.py
--	Calls the relevant server functions to create a client and connect to server
--	File names on server are iterated through and those which have type csv are read
+## client.py
+#### download_files
+-   Connects to the FTP server (parameters defined earlier in the script)
+-   Gets a list of filenames available on the server
+-   Iterates through each file available, checking for whether the file name matches the expected pattern using Regex
+-   Checks each file name (that passes the previous check) for whether it is from the date specified by the user in main.py
+-   Checks each file name (that passes the previous checks) for whether it has already been downloaded before by checking 'downloaded_log.txt'. If it has been downloaded before, ignore it. If it has not been downloaded before, download it to the 'to_check' folder and then log the download into 'download_log.txt'
+-   If the file name does not match the expected pattern, check 'ignored_log.txt'. If it is already listed, ignore it. If not, write the file name to the log
+-   Close the FTP connection, return the number of files downloaded successfully
+-   Catch errors and return -1 to denote to main.py that an error occurred. Allows the program to continue running if an error occurs, and lets the user try again if they wish
