@@ -1,47 +1,53 @@
 # Class function descriptors
-## Main.py
+## main.py
 #### checkDate: (removed)
 [CheckDate details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_checkDate_function_details.md) <br>
 The above linked document explains why this function was removed, the function itself and includes the test plan and a link for to the unit test of this function which was passing before function removal
 
-#### dateLogic: 
--	Date.today is used to get todays date, the components of ‘todays’ date are then stored in arr1
+#### date_logic: 
+-	date.today is used to get todays date, the components of ‘todays’ date are then stored in arr1
 -	arr2 contains the current date as determined by the calendar
--	The dates are compared using a for loop, if the ‘today date’ value is greater than the cal.getdate value then the date is valid. If y,which controls indexing, is 1 less then the length of arr1 and the today date values in array 1 are greater than or equal to the values at a set index position in array 2 then the date is again valid.
--	If the date is invalid an error message gets shown, current date is configured to be that from the calendar
--	Arrays storing files, etc are checked. If there are no files for that date then an error message is shown.
+-	The dates are compared using a for loop, if the ‘today date’ value is greater than the cal.getdate value then the date is valid. If y, which controls indexing, is 1 less then the length of arr1 and the today date values in array 1 are greater than or equal to the values at a set index position in array 2 then the date is again valid
+-	If the date is invalid, an error message gets shown in a popup box, where current date is configured to be that from the calendar
+-	client.download_files is called with parameters of the date requested by the user. This returns the number of files successfully downloaded
+-	Displays to the user how many files were downloaded if the number downloaded is greater than 0
+-	Calls validate_file.main() to check, validate, and sort all the downloaded files. This returns an array of the paths on disk the files have been written to
+-	Iterates through the array of file paths, showing the user the names of each file and the error codes and messages associated with each file. Dynamically selects the amount of characters per line to show in order to improve readability for the user, and improve the general look of the program
+-	If no files are downloaded, or an error is encountered in the process, display this to the user
 
-#### ‘_main’: 
+#### ‘\_\_main__’: 
 -	Setting up the gui
 -	Current date is set to the ‘today date’
 
-## Server.py
--	Creating a user with log in credentials, server is created and run
+## server.py
+#### main:
+-	Creates a user with log in credentials, server is created and run
+-	User only has read and list permissions, so cannot escape the folder specified and can only read files that exist there
 
-## Update validate_file.py
+## validate_file.py
 #### Verify data:
 -	Calls all the verification methods as detailed below. Returns a boolean representing whether a file is valid or not.
 
-#### Check_header:
+#### check_header:
 -	Checks header line is correct
 -	If it is incorrect, the error is identified and a description is stored in the variable diff_string in a certain format. The info file name for the file being processed is created by removing the ".csv" extension from the file name and adding "_info.txt".  The info file is then created for the invalid csv file detailing the issues with the header as included in the ‘diff_string’. 
 -   If possible, the header is then replaced with the correct header and the correctly formatted csv file created, with the error reported in the info file without the file being marked as invalid.  Otherwise, the file is marked as invalid.
 -   If there are no issues with the header, the file is not marked as invalid
 -   Finally, the value representing whether or not the header tests have passed is returned to verify_data
 
-#### Remove_empty:
+#### remove_empty:
 -	Checks the file data, locates any missing values citing their row and column position as x and y coordinates.
 -	If there is a missing value then a list of the coordinates of these missing values are created, an error message for each one created in the ‘error_string’.
 -   An info.txt file is created for this invalid file detailing the errors with the missing values
 -   The value representing whether or not the tests have passed is returned to verify_data
 
-#### Check_num_rows:
+#### check_num_rows:
 -	Gets the number of rows int the file
 -   If there are not 10 rows then an info.txt file is created for this invalid file detailing the fact the number of rows is wrong
 -   The value representing whether or not the tests have passed is returned to verify_data
 -   It is assumed that 10 rows is correct for each file as this is the case for the test data, but this can easily be changed
 
-#### Check_ids:
+#### check_ids:
 -	All of the batch ids in the file are acquired using the header value ‘batch_id’ as a reference
 -   For each id in the file, the following test are performed:
 -	If the id has the type integer and is greater than 0, then the set of batch ids that have already been processed is checked, and if the current id already exists in the set then an error message is created and the ‘is_invalid’ Boolean value is set to True, otherwise, the id is considered valid and it is added to the set.
@@ -51,16 +57,16 @@ The above linked document explains why this function was removed, the function i
 -	If ‘is_invalid’ Boolean value is set to True then an info.txt file detailing the issue with the batch id is created.
 - is_invalid is returned to verify_data
 
-#### Check_num_columns (removed):
+#### check_num_columns (removed):
 [Check_num_columns details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_num_columns_check_details.md) <br>
 The above linked document explains why this function was removed, describes the function and includes the test plan and a link for to the unit test of this function which was passing before function removal
 
-#### Check_timestamp:
+#### check_timestamp:
 -	Goes through all values in the ‘timestamp’ column and checks if each listed timestamp matches the regex for the pre-defined format, if not an error message is generated and stored in an info.txt file for this invalid file.  is_invalid is set to True (it is instantiated as False)
 -   If one timestamp is incorrect, the rest are not checked
 -   is_invalid is returned to verify data
 
-### Check_readings:
+### check_readings:
 -   For each reading in each row, the following tests are performed:
 -   If the reading is not a float, it is checked it see if it is an int.  If it is, it is cast as a float, and the updated value is saved to the csv file.  An info.txt file is still created reporting the error, but the file is not marked as invalid.
 -   If the reading is not a float or an int, the error cannot be fixed, so the file is marked as invalid and the error is reported in the file's info.txt file.
@@ -69,7 +75,7 @@ The above linked document explains why this function was removed, describes the 
 -   If one reading is incorrect, the rest are not checked.
 -   If all the readings pass all the texts, it is returned that the file is not invalid (by this function)
 
-#### Main:
+#### main:
 -   Each csv is loaded into the program from the directory that they are downloaded from the server to.
 -	Each input file is checked to see if its empty, if it is then an info.txt file for that file is generated and populated with the relevant error data, and the file is marked as invalid
 -    If it is not empty, then the contents of the file are read into a dataframe, which is passed along with the file name into verify_data so that further tests can be performed on it.
@@ -77,6 +83,7 @@ The above linked document explains why this function was removed, describes the 
 -   If the file is invalid, it is moved along with its info.txt file to the "rejected" folder and sorted into a calendar-based directory structure based on the date of the csv file.
 -   If the file is valid, a message denoting this is added to its info.txt file.  They are both then moved to the "successful" folder and sorted into a calendar-based directory structure based on the date of the csv file.
 -   In both cases, if the desired directory does not already exist, then it is created before the files are moved.
+-   Returns a list of all .csv file paths written to
 
 
 ## Client.py
