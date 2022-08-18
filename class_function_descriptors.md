@@ -2,7 +2,7 @@
 ## main.py
 #### checkDate: (removed)
 [CheckDate details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_checkDate_function_details.md) <br>
-The above linked document explains why this function was removed, the function itself and includes the test plan and a link for to the unit test of this function which was passing before function removal
+The above linked document includes an explanation of why this function was removed, the function itself, its test plan, and a link to the unit test of this function, which was passing before function removal.
 
 #### date_logic: 
 -	date.today is used to get todays date, the components of ‘todays’ date are then stored in arr1
@@ -59,7 +59,7 @@ The above linked document explains why this function was removed, the function i
 
 #### check_num_columns (removed):
 [Check_num_columns details](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/removed_num_columns_check_details.md) <br>
-The above linked document explains why this function was removed, describes the function and includes the test plan and a link for to the unit test of this function which was passing before function removal
+The above linked document explains why this function was removed, describes the function and includes the test plan and a link for to the unit test of this function which was passing before function removal.
 
 #### check_timestamp:
 -	Goes through all values in the ‘timestamp’ column and checks if each listed timestamp matches the regex for the pre-defined format, if not an error message is generated and stored in an info.txt file for this invalid file.  is_invalid is set to True (it is instantiated as False)
