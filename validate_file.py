@@ -233,53 +233,56 @@ def check_readings(file_data, file_name):
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
-path = 'files/to_check'
-files_to_check =  glob.glob(path + '/*.csv')
-for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
-    is_invalid = False
-    #if file is empty
-    if os.stat(file_name).st_size == 0:
-        #removes data from file name to create info file name
-        info_name = file_name.replace(".csv", "")
-        #adds error to info file
-        with open(info_name +"_info.txt", "a+") as info_file:
-            info_file.write("Error 100 - Empty File\n")
-        is_invalid = True
-    else:
-        #get file data and perform validity checks on it
-        file_data = pandas.read_csv(file_name)
-        with open(file_name) as file:
-            has_data = file.readline and file.readline
-        if has_data:
-            is_invalid = verify_data(file_data, file_name)
-        else:
+def main():
+    path = 'files/to_check'
+    files_to_check =  glob.glob(path + '/*.csv')
+    for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
+        is_invalid = False
+        #if file is empty
+        if os.stat(file_name).st_size == 0:
+            #removes data from file name to create info file name
             info_name = file_name.replace(".csv", "")
             #adds error to info file
             with open(info_name +"_info.txt", "a+") as info_file:
-                info_file.write("Error 101 - Header Only\n")
+                info_file.write("Error 100 - Empty File\n")
             is_invalid = True
-    
-    #get data from filename to use in directory system
-    year = file_name[24:28]
-    month = file_name[28:30]
-    day = file_name[30:32]
-    #create path name to save to based on validity of file
-    if is_invalid:
-        desired_path = 'files/rejected/' + year + '/' + month + '/' + day
-    else:
-        desired_path = 'files/successful/' + year + '/' + month + '/' + day
-        #create info file denoting a valid file
-        info_name = file_name.replace(".csv", "")
-        with open(info_name +"_info.txt", "a+") as info_file:
-            info_file.write("000 - Valid File\n")
+        else:
+            #get file data and perform validity checks on it
+            file_data = pandas.read_csv(file_name)
+            with open(file_name) as file:
+                has_data = file.readline and file.readline
+            if has_data:
+                is_invalid = verify_data(file_data, file_name)
+            else:
+                info_name = file_name.replace(".csv", "")
+                #adds error to info file
+                with open(info_name +"_info.txt", "a+") as info_file:
+                    info_file.write("Error 101 - Header Only\n")
+                is_invalid = True
+        
+        #get data from filename to use in directory system
+        year = file_name[24:28]
+        month = file_name[28:30]
+        day = file_name[30:32]
+        #create path name to save to based on validity of file
+        if is_invalid:
+            desired_path = 'files/rejected/' + year + '/' + month + '/' + day
+        else:
+            desired_path = 'files/successful/' + year + '/' + month + '/' + day
+            #create info file denoting a valid file
+            info_name = file_name.replace(".csv", "")
+            with open(info_name +"_info.txt", "a+") as info_file:
+                info_file.write("000 - Valid File\n")
 
-    #if the correct location in the file system does not exist, create it
-    if not (os.path.exists(desired_path)):
-       os.makedirs(desired_path)
+        #if the correct location in the file system does not exist, create it
+        if not (os.path.exists(desired_path)):
+            os.makedirs(desired_path)
 
-    desired_path += '/'
+        desired_path += '/'
 
-    #move file and info file to correct directory
-    shutil.move(file_name, desired_path + file_name.replace("files/to_check\\", ""))
-    info_name = file_name.replace(".csv", "") + "_info.txt"
-    shutil.move(info_name, desired_path + info_name.replace("files/to_check\\", ""))       
+        #move file and info file to correct directory
+        shutil.move(file_name, desired_path + file_name.replace("files/to_check\\", ""))
+        info_name = file_name.replace(".csv", "") + "_info.txt"
+        shutil.move(info_name, desired_path + info_name.replace("files/to_check\\", ""))
+             
+    return

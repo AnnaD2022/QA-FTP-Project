@@ -141,7 +141,7 @@ TODO - why chose GUI not CLI (jacob?)
 - As a team we decided not to develop tests for 'server.py'. This is beacuse this code was heavily influenced by existing, available server code and thus known to work as required.
 <br>
 
-#### Overal testing approach
+#### Overall testing approach
 ##### validate_files:
 The predominant approach when testing the functions in the validate_files script was to pass in one of the testing csv files found within the tests folder of the repository and then use 'assertTrue/ assertFalse' to verify the correct value had been returned by the function and also 'assertTrue' alongside a test to ensure, when relevant, a log file had been created. This method enabled us to ensure that the functions were not only behaving logically as intended but also were generating files in the correct location and under the correct name format.
 
