@@ -233,7 +233,9 @@ def check_readings(file_data, file_name):
 
 # main
 # take in all csv files that have been requested from the server and not yet verified
+#returns list of filepaths written to for gui handling
 def main():
+    files_written = []
     path = 'files/to_check'
     files_to_check =  glob.glob(path + '/*.csv')
     for file_name in files_to_check: # assume file name is in correct format and file exists as this is handled by the server
@@ -284,5 +286,6 @@ def main():
         shutil.move(file_name, desired_path + file_name.replace("files/to_check\\", ""))
         info_name = file_name.replace(".csv", "") + "_info.txt"
         shutil.move(info_name, desired_path + info_name.replace("files/to_check\\", ""))
+        files_written.append(desired_path + file_name.replace("files/to_check\\", ""))
              
-    return
+    return files_written
