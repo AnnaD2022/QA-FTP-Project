@@ -1,40 +1,12 @@
-import tkinter
-import tkinter.messagebox
-import pandas as pd
-import os
 import client
 
 from tkinter import *
-from tkinter import messagebox
 from tkcalendar import Calendar
 from datetime import *
 from ctypes import windll
 
-#def checkDate():
-#    filenames = []
-#    dates = []
-#
-#    path = "./temp" #esj replaced: C:/Users/delegate119/Documents/GitHub/QA-FTP-Project/temp with thepath name seen. This is because the removed path name was specific to the mian.py creators device and was not recognised when run on other devices
-#    for filename in os.listdir(path):
-#        if filename.endswith('.csv'):
-#            filename = filename.replace("MED_DATA_", "")
-#            try:
-#                year = filename[0:4]
-#                month = int(filename[5:6])
-#                day = int(filename[6:8])
-#                temp_date = year + "/" + str(month) + "/" + str(day)
-#                dates.append(temp_date)
-#                print(temp_date)
-#                filenames.append(filename)
-#            except:
-#                continue
-#    checkDate.filenames = filenames
-#    checkDate.dates = dates
-#    checkDate.path = path
-#    # The above lines enable the filenames and dates arrays to be accessed in the checkDate test
-
 ##Function to check whether selected date is valid (i.e. not after current date)
-def dateLogic():
+def date_logic():
     today = date.today()
     arr1 = [today.year, today.month, today.day]
     arr2 = cal.get_date().split("/")
@@ -55,15 +27,16 @@ def dateLogic():
         return
     ##Else update date on GUI to show selected, call into ftp client with required date
     else:
-        dates.config(text="Current date " + cal.get_date())
+        dates.config(text="Current date selected: " + cal.get_date())
         downloaded_count = client.download_files(arr2[0], arr2[1], arr2[2])
         if downloaded_count >= 0:
             number_downloaded.config(text="Number of files successfully downloaded: " + str(downloaded_count))
         else:
             number_downloaded.config(text="Error occurred in file transfer process. Retry.")
 
-
+##Main GUI script
 if __name__ == '__main__':
+    ##Initialise Tk
     root = Tk()
     root.title("Get Medical Files")
     root.resizable(False, False)
@@ -74,24 +47,23 @@ if __name__ == '__main__':
     root.tk.call('tk', 'scaling', 2.5)
 
     current_date = date.today()
-
+    
+    ##Initialise GUI components
     dt1 = date(2010, 12, 12)
     cal = Calendar(root, selectmode='day',
                    year=current_date.year, month=current_date.month, day=current_date.day, date_pattern="yyyy/m/d",
                    mindate=dt1)
 
-    Button(root, text="Get Files", command=dateLogic).place(x=525, y=210)
+    Button(root, text="Get Files", command=date_logic).place(x=525, y=210)
 
-    dates = Label(root, text="")
-    number_downloaded = Label(root, text="")
-    showTxt = Label(root, text="Please select a date for the files you want to see: ", font=("Helvetica bold", 10),
+    dates = Label(root, text="No date selected yet.")
+    number_downloaded = Label(root, text="No transfer attempt yet.")
+    show_txt = Label(root, text="Please select a date for the files you want to see: ", font=("Helvetica bold", 10),
                     bg="#DFFEFF")
 
-    showTxt.place(x=35, y=35)
+    show_txt.place(x=35, y=35)
     cal.place(x=50, y=100)
-    dates.place(x=600, y=400)
-    number_downloaded.place(x=500, y=500)
-
-    #checkDate()
+    dates.place(x=750, y=400, anchor="center")
+    number_downloaded.place(x=750, y=500, anchor="center")
 
     root.mainloop()
