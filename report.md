@@ -88,7 +88,9 @@ The remaining team members called a meeting to tackle the issue, efficiently rea
 Detailed descriptions of the purpose of each section of the code can be found at the link below: <br>
 [Class function descriptors document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/class_function_descriptors.md) 
 
-TODO - why chose GUI not CLI (jacob?)
+### User Interface
+<p>We opted to implement a GUI over a CLI for a few key reasons. The main reason is that it is generally considered more user-friendly, and simplifies the required knowledge to operate the program. A GUI also allowed for better usability with regards to the calendar and date selection, since it could now be a visual menu rather than entering a date manually. It also allowed us to present the results of the program execution more easily to the user.</p>
+<p>There are, however, downsides to only implementing a GUI. A CLI would allow cron jobs to be implemented more easily on a system since it would only require a single command to be executed. Our GUI can still be implemented as a cron job though, it just requires some human interaction. Thus, we still satisfy this requirement of the brief.</p>
 
 ### Assumptions
 <p>When interpreting the brief provided, Anna D, who was working on the file validation and archiving portion of the project, found that she needed to make some assumptions about what a "valid" file consisted of, based on the test data provided.  They are included below for clarity, and the code has been designed to be easily adaptable to any changes in requirements.</p>
