@@ -24,7 +24,7 @@ class checkReadingUnitTest(unittest.TestCase):
 
       def test_cr3(self):
           #True should be returned
-          self.assertTrue(check_readings(pd.read_csv('./tests/testDoc6.1notfloar.csv'),"testDoc6.1notfloar.csv"))
+          self.assertTrue(check_readings(pd.read_csv('./tests/testDoc6.2RangeDP.csv'),"testDoc6.2RangeDP.csv"))
 
           # A log file containing error messages, etc should be produced as test file passed in has incorrectly rounded readings.
           self.assertTrue(exists('testDoc6.2RangeDP_info.txt'))

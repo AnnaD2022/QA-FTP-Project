@@ -148,3 +148,7 @@ The predominant approach when testing the functions in the validate_files script
 ##### main
 The main.py script generates the GUI and based on user interaction with that GUI calls relevant functions. The nature of the logic involved would have made it ineffective to call included functions in an isolated manner. Instead, the entire script is called and specific inputs and expected outputs defined to facilitate a 'check by inspection' approach.
 
+##### client
+**Note: for the client tests to work the server.py script needs to be executing in the background** <br>
+The client tests predominently function by validating the expected return value is generated given a valid or invalid date plus manipulation of the clients server credentials.
+
