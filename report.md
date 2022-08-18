@@ -131,7 +131,20 @@ TODO - why chose GUI not CLI (jacob?)
 
 ### README
 [README document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/README.md)
-
 ## Test Plans
-**Please note that the unit tests are linked within the test plan document, they and any csv files used can also be found in the tests folder on the following page: [main project repo](https://github.com/AnnaD2022/QA-FTP-Project)** <br>
 [Test plan document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_plans.md)
+<br>
+
+#### Key notes:
+- The unit test scripts are linked within the test plan document, they can also be found in the [main project repo](https://github.com/AnnaD2022/QA-FTP-Project)
+- The csv files used within the tests can be found in the [tests folder](https://github.com/AnnaD2022/QA-FTP-Project/tree/main/tests)
+- As a team we decided not to develop tests for 'server.py'. This is beacuse this code was heavily influenced by existing, available server code and thus known to work as required.
+<br>
+
+#### Overal testing approach
+##### validate_files:
+The predominant approach when testing the functions in the validate_files script was to pass in one of the testing csv files found within the tests folder of the repository and then use 'assertTrue/ assertFalse' to verify the correct value had been returned by the function and also 'assertTrue' alongside a test to ensure, when relevant, a log file had been created. This method enabled us to ensure that the functions were not only behaving logically as intended but also were generating files in the correct location and under the correct name format.
+
+##### main
+The main.py script generates the GUI and based on user interaction with that GUI calls relevant functions. The nature of the logic involved would have made it ineffective to call included functions in an isolated manner. Instead, the entire script is called and specific inputs and expected outputs defined to facilitate a 'check by inspection' approach.
+
