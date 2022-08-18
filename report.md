@@ -10,10 +10,10 @@
 ## Team Management
 #### Team Leadership
 <p>Rather than choosing one person to lead the entire team, we adopted a democratised system in which all major project decisions were made as a group.  If there were any disagreements, each programmer was allowed to explain their reasoning, and a compromise was found that suited all parties.  We found that this approach led to an open and understanding work environment, in which any member could ask for help or give suggestions, and nobody was forced to work on something they didn't enjoy or didn't have the time to do.  Overall, we believe that this approach certainly resulted in a higher quality product than would have otherwise been produced, as well as a greater increase in programmer skill than would otherwise have been achieved as it facilitated a greater number of learning and development opportunities.</p>
-<br>
 
 #### Work division
 <p>Work was divided evenly between all members of the team based on strengths and prior experience. The fact that some team members were together in person at the time of project commencement and some were not also impacted work division. In-person team members worked together to produce the main code components, and those who were virtual adopted the equivalant of a Quality Assurance role, carrying out tests on the code and suggesting improvements with an objective eye as they had not been involved in its production.</p> <p>Documentation, such as this report and any linked documents, was a team effort, completed by the team members most familiar with a certain section and peer assessed by other team members to ensure quality, clarity, and detail were maintained.</p>
+<br>
 
 |Teams name| Contributions |
 |----------|---------------|
@@ -35,7 +35,6 @@ The remaining team members called a meeting to tackle the issue, efficiently rea
 <br>
 
 #### Cooperation
-- TODO all <br>
 <p>In regards to cooperation between team members, everything generally went smoothly, with most team members completing their assigned tasks in a timely manner and checking teams on a regular basis.</p>
   <p>As mentioned previously, a teams chat was established for developers to update eachother on their progress; this soon became a way for team members to ask for and provide help with certain sections of code, as well as to suggest improvements to other people's code.</p>
   <p>All team members also attempted to adhere to best practices when writting commit messages and descriptions as well as when generating comments in their code to ensure they remained clear and concise and thus enable other team members to understand exactly what changes were being made where and when and consequently how this could impact their deliverables. </p>
@@ -45,13 +44,12 @@ The remaining team members called a meeting to tackle the issue, efficiently rea
 ## Approach to deliverables
 #### Choice of programming language
 <p>As a team we decided to complete the entire project in python, as all team members have previous experience with the language, and thus felt more confident using it than C or PowerShell. Additionally, file handling, data processing and data manipulation, which are all integral parts of the task are, in our opinion, much simpler in python than the other languages permitted.</p>
-
 <br>
 
 #### Use of version control
 <p>As a team we decided to use GitHub to facilitate version control throughout the completion of the project. This was in part due to the fact all members of the team had prior experience using GitHub or GitLab and thus were familiar with the processes involved in interacting with a repository as well as GitHub's ability to act as a secure, private host for our code; but mostly as a result of the many features GitHub offers.</p> 
 <p>Auto-resolution of conflicts when multiple members of the team had collaborated on the same area of code helped us to increase the efficiency with which we produced working features. The ability to quickly and easily share what we were working on with one another using the simple commit, push and pull commands aided in our collaborative process as we could keep up to date with what others were doing and shape our code to best suit these deliverables, thus also ensuring our code remained cohesive and clear.</p>
-<p>The chronological order with which commits are registered and stored in the GitHub repository, as well as team members' descriptive commit messages, also enabled us to refer or return to prior versions as needed and understand exactly what changes had been made when updated versions of the code no longer functioned as expected to facilitate a faster issue resolution process.</p><br> Overall, adoption of a GitHub repository has facilitated our efficient production of a quality product that meets outlined project requirements.
+<p>The chronological order with which commits are registered and stored in the GitHub repository, as well as team members' descriptive commit messages, also enabled us to refer or return to prior versions as needed and understand exactly what changes had been made when updated versions of the code no longer functioned as expected to facilitate a faster issue resolution process.</p> Overall, adoption of a GitHub repository has facilitated our efficient production of a quality product that meets outlined project requirements.
 
 <br>
 
@@ -61,13 +59,11 @@ The remaining team members called a meeting to tackle the issue, efficiently rea
 
 <p>Linking to this, we adopted informal sprints. Due to the time restrictions on the project, industry standard two week long sprints were not feasible, however short sprints lasting between two and three days in which each team member aimed to produce a set section of their portion of the code did occur throughout the project.  Such sprints usually took place after meetings regarding progress, following identification from one team member that a currently incomplete section of another person's code would be needed for them to complete their work.</p>
 <p>Pair programming was not used significantly during initial development as a result of our feature driven approach. However, this approach was utilised during the testing and review stage of the project, in which either in pairs or as an entire team we worked together to resolve identified bugs and change working implementations of sections of the code to improve efficiency, amongst other issues, with an objective eye.</p>
-
 <br>
 
 ## Problem solving
 <p>Throught the duration of this project, the teams primary approach to solving any issues that arose was a collaborative discussion either in our MS teams chat or a 'face to face' meeting in which encountered problems were broken down into sections and distributed to the team members with the most experience in that area. This problem solving metholodgy can be seen in our approach to the project as a whole; the overall system was split into 4 notable 'chunks': verification of input data, the client/server, the user interface, and quality control following an intial meeting and establishment of each others strengths and weaknesses.</p>
 <p>Maintaining this collaborative approach has allowed our solution to be produced to a high standard as team member experience and research ability was combined in the face of errors to identify the best solution that not only illuminated the issue but also best suited our code and stylistic approach. Practically, following discussions and agreement of a course of action to resolve an issue discovered in testing for example, changes to code were either implemented by Emily SJ with the oversight from the relevant code owner or, if it was a larger, more involved fix, the code owner themselves. The benefit of this was that the underlying logic of functions was not compromised with changes made but also that different members of the team got the opportunity to interact with all areas of the code furthering our understanding of the solution.</p>
-<br>
 
 #### Bug fixing
 <p>In regards to bugs, obscure errors such as value errors were predominantly discovered during the testing portion of development. When a bug was discovered, a note was made in the code and the test plan for any corresponding test that subsequently failed, detailing why the failure occured. We then used our group chat to collaboratively discuss possible solutions as well as how any subsequent changes would impact other aspects of the code and how changes could be implemented whilst maintaining the integrity of other developers' work.</p>
@@ -130,7 +126,7 @@ Detailed descriptions of the purpose of each section of the code can be found at
 
 ### README
 [README document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/README.md)
-## Test Plans
+## Testing
 [Test plan document](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/test_plans.md)
 <br>
 
