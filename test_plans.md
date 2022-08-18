@@ -73,3 +73,12 @@ This script creates the GUI and validates the date selected by the user thus the
 | test_m1 | Selection of todays date in presented calendar (18/08/2022) | Message box 'current date selected 22/8/18', another message box indicating the number of successfully downloaded files or that there was an issue in download will also be shown | Passed 18/08/2022 <br> ![testing_today](./tests/images_main_tests/test_today.png) | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py)<br><br> [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests_main.py) |
 | test_m2 | Selection of yesterdays date in presented calendar (22/8/17) | Message box 'current date selected 17/08/2022', another message box indicating the number of successfully downloaded files or that there was an error in download will also be shown| Passed 18/08/2022 <br> ![testing_tomorrow](./tests/images_main_tests/test_yesterday.png) | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py)<br><br> [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests_main.py)  |
 | test_m3 | Selection of tomorrows date in presented calendar (19/08/2022)| Message box: Error", "You cannot select a date later than today! | test failed 18/08/2022 -> incorrect definition of 'messagebox' in main.py lead to error generation when you attempted to select tomorrow date <br><br> test passed 18/08/2022 -> 'from tkinter import message box' added to main.py to enable message box to be displayed. <br> ![testing_tomorrow](./tests/images_main_tests/test_tomorrow.png) | [Tested code](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/main.py)<br><br>  [Unit test file](https://github.com/AnnaD2022/QA-FTP-Project/blob/main/tests_main.py) |
+
+## client.py
+#### download_files:
+|Test|Inputs|Expected Outcome| pass/fail | links |
+|----|------|----------------|-----------|-------|
+| test_cl1 | 2022,8,17 | the number of files pertaining to this day should be returned - return val should not be -1 | | |
+| test_cl2| function argument input:2022,8,17 <br> Additionally, the user parameter is changed to 'bob' | -1 returned | | |
+|test_cl3 | function argument input:2022,8,17 <br> Additionally, the password parameter is changed to 'tempPassword' | | | |
+|test_cl4 | 2023,8,17 | '-1' should be returned | | |
