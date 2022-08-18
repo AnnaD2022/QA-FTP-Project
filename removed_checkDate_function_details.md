@@ -8,6 +8,30 @@ The checkDate function implemented input file handling logic which has been impl
 -	If the file has type '.csv', then it replaces the file name with “Med_DATA_”
 -	Year, month and day are abstracted from the filename, formatted as a date by inserting '/',  the date and file name are then added to the respective arrays
 
+## The function:
+def checkDate():
+    filenames = []
+    dates = []
+
+    path = "./temp" #esj replaced: C:/Users/delegate119/Documents/GitHub/QA-FTP-Project/temp with thepath name seen. This is because the removed path name was specific to the mian.py creators device and was not recognised when run on other devices
+    for filename in os.listdir(path):
+        if filename.endswith('.csv'):
+            filename = filename.replace("MED_DATA_", "")
+            try:
+                year = filename[0:4]
+                month = int(filename[5:6])
+                day = int(filename[6:8])
+                temp_date = year + "/" + str(month) + "/" + str(day)
+                dates.append(temp_date)
+                print(temp_date)
+                filenames.append(filename)
+            except:
+                continue
+    checkDate.filenames = filenames
+    checkDate.dates = dates
+    checkDate.path = path
+    # The above lines enable the filenames and dates arrays to be accessed in the checkDate test
+
 ## Test plan:
 |Test|Inputs|Expected Outcome| pass/fail | links |
 |----|------|----------------|-----------|-------|
