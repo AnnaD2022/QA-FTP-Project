@@ -7,7 +7,7 @@ from tkcalendar import Calendar
 from datetime import *
 from ctypes import windll
 
-##Function to check whether selected date is valid (i.e. not after current date)
+##Function to check whether selected date is valid (i.e. not after current date), call functions to fetch and validate files, and display all information to the user
 def date_logic():
     today = date.today()
     arr1 = [today.year, today.month, today.day]
@@ -47,7 +47,7 @@ def date_logic():
                 f = open(info_filepath, 'r')
                 error_line = f.readline().strip()
                 f.close()
-                ##Cut error_line into smaller sections to display better - max width of 120 - improves readability for user
+                ##Split error_line into smaller sections to display better - max width of 120 - improves readability for user
                 index = 0
                 while index < len(error_line):
                     if index + 100 < len(error_line):
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
     current_date = date.today()
     
-    ##Initialise GUI components
+    ##Initialise GUI components, place them in appropriate positions
     dt1 = date(2010, 12, 12)
     cal = Calendar(root, selectmode='day',
                    year=current_date.year, month=current_date.month, day=current_date.day, date_pattern="yyyy/m/d",
